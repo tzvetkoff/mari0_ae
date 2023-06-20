@@ -1,3 +1,7 @@
 makelove-build/
 .vscode/settings.json
 .idea/
+release/
+local.lua
+Makefile.local
+Makefile.env

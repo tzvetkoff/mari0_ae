@@ -1,0 +1,65 @@
+# Variables
+VERSION_BASE  = 0.0
+VERSION_PATCH = $(shell git rev-list HEAD | wc -l)
+VERSION       = $(VERSION_BASE).$(VERSION_PATCH)
+
+##
+##@ General
+##
+
+## Print this message and exit
+.PHONY: help
+help:
+	@awk '																								\
+		BEGIN { 																						\
+			printf "\nUsage:\n  make \033[36m<target>\033[0m\n"											\
+		}																								\
+		END {																							\
+			printf "\n"																					\
+		}																								\
+		/^[0-9A-Za-z-]+:/ {																				\
+			if (prev ~ /^## /) {																		\
+				printf "  \x1b[36m%-23s\x1b[0m %s\n", substr($$1, 0, length($$1)-1), substr(prev, 3)	\
+			}																							\
+		}																								\
+		/^##@/ {																						\
+			printf "\n\033[1m%s\033[0m\n", substr($$0, 5)												\
+		}																								\
+		!/^\.PHONY/ {																					\
+			prev = $$0																					\
+		}																								\
+	' $(MAKEFILE_LIST)
+
+# .env/.local
+ifneq (,$(wildcard ./Makefile.env))
+include Makefile.env
+endif
+ifneq (,$(wildcard ./Makefile.local))
+include Makefile.local
+endif
+
+
+##
+##@ Build
+##
+
+## Build
+.PHONY: build
+build:
+	makelove -n $(VERSION)
+	mkdir -p ./release/$(VERSION)
+	cp ./makelove-build/$(VERSION)/love/mari0_ae.love         ./release/$(VERSION)/mari0_ae-v$(VERSION).love
+	cp ./makelove-build/$(VERSION)/appimage/mari0_ae.AppImage ./release/$(VERSION)/mari0_ae-v$(VERSION).AppImage
+	cp ./makelove-build/$(VERSION)/macos/mari0_ae-macos.zip   ./release/$(VERSION)/mari0_ae-v$(VERSION)-macos.zip
+	cp ./makelove-build/$(VERSION)/win32/mari0_ae-win32.zip   ./release/$(VERSION)/mari0_ae-v$(VERSION)-win32.zip
+	cp ./makelove-build/$(VERSION)/win64/mari0_ae-win64.zip   ./release/$(VERSION)/mari0_ae-v$(VERSION)-win64.zip
+
+## Release
+.PHONY: release
+release:
+	gh release create --generate-notes $(VERSION) ./release/$(VERSION)/*.*
+
+## Clean
+.PHONY: clean
+clean:
+	rm -rf ./makelove-build ./release/$(VERSION)

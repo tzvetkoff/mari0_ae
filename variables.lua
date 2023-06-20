@@ -1,4 +1,4 @@
---SETABLE VARS--	
+--SETABLE VARS--
 --almost all vars are in "blocks", "blocks per second" or just "seconds". Should be obvious enough what's what.
 --also maxyspeed, bounceheight, koopajumpforce need to be updated in game.lua as well.
 portalgundelay = 0.2
@@ -137,7 +137,7 @@ uwwalkacceleration = 8
 
 uwrunacceleration = 16
 uwwalkaccelerationair = 8
-uwmaxairwalkspeed = 5 
+uwmaxairwalkspeed = 5
 uwmaxairshellwalkspeed = 6.4
 uwmaxwalkspeed = 3.6
 uwmaxrunspeed = 5
@@ -761,6 +761,9 @@ gelcannondelay = 0.05
 gelcannonspeed = 30
 infinitetime = false
 infinitelives = false
+alwaysfiery = false
+nevershrink = false
+neverdie = false
 
 pausemenuoptions = {"resume", "suspend", "volume", "quit to", "quit to"}
 pausemenuoptions2 = {"", "", "", "menu", "desktop"}

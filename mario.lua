@@ -10,11 +10,11 @@ function mario:init(x, y, i, animation, size, t, properties)
 		self.size = size or 1
 	end
 	self.t = t or "portal"
-	
+
 	--custom character
 	self.character = mariocharacter[self.playernumber]
 	self.characterdata = characters.data[mariocharacter[self.playernumber]]
-	
+
 	--PHYSICS STUFF
 	self.speedx = 0
 	self.speedy = 0
@@ -42,19 +42,19 @@ function mario:init(x, y, i, animation, size, t, properties)
 		self.portals = "none"
 	end
 	self:updateportalsavailable()
-	
+
 	self.gravitydir = "down"
-	
+
 	if bigmario then
 		self.width = self.width*scalefactor
 		self.height = self.height*scalefactor
 	end
-	
+
 	self.y = y+1-self.height
 	self.static = false
 	self.active = true
 	self.category = 3
-	self.mask = {	true, 
+	self.mask = {	true,
 					false, true, false, false, false,
 					false, true, false, false, false,
 					false, true, false, false, false,
@@ -62,16 +62,16 @@ function mario:init(x, y, i, animation, size, t, properties)
 					false, false, false, false, false,
 					false, false, false, false, false,
 					false, true}
-					
+
 	if playercollisions then
 		self.mask[3] = false
 	end
 	if edgewrapping then
 		self.mask[10] = true
 	end
-	
+
 	self.emancipatecheck = true
-	
+
 	--IMAGE STUFF
 	self.smallgraphic = {}
 	if self.character and self.characterdata["animations"] then
@@ -79,7 +79,7 @@ function mario:init(x, y, i, animation, size, t, properties)
 			self.smallgraphic[j] = self.characterdata["animations"][j]
 		end
 	end
-	
+
 	self.biggraphic = {}
 	if self.character and self.characterdata["biganimations"] then
 		for j = 0, #self.characterdata["biganimations"] do
@@ -105,42 +105,42 @@ function mario:init(x, y, i, animation, size, t, properties)
 			self.superballgraphic[j] = self.characterdata["superballanimations"][j]
 		end
 	end
-	
+
 	self.hammergraphic = {}
 	if self.character and self.characterdata["hammeranimations"] then
 		for j = 0, #self.characterdata["hammeranimations"] do
 			self.hammergraphic[j] = self.characterdata["hammeranimations"][j]
 		end
 	end
-	
+
 	self.froggraphic = {}
 	if self.character and self.characterdata["froganimations"] then
 		for j = 0, #self.characterdata["froganimations"] do
 			self.froggraphic[j] = self.characterdata["froganimations"][j]
 		end
 	end
-	
+
 	self.raccoongraphic = {}
 	if self.character and self.characterdata["raccoonanimations"] then
 		for j = 0, #self.characterdata["raccoonanimations"] do
 			self.raccoongraphic[j] = self.characterdata["raccoonanimations"][j]
 		end
 	end
-	
+
 	self.tinygraphic = {}
 	if self.character and self.characterdata["tinyanimations"] then
 		for j = 0, #self.characterdata["tinyanimations"] do
 			self.tinygraphic[j] = self.characterdata["tinyanimations"][j]
 		end
 	end
-	
+
 	self.tanookigraphic = {}
 	if self.character and self.characterdata["tanookianimations"] then
 		for j = 0, #self.characterdata["tanookianimations"] do
 			self.tanookigraphic[j] = self.characterdata["tanookianimations"][j]
 		end
 	end
-	
+
 	self.skinnygraphic = {}
 	if self.character and self.characterdata["skinnyanimations"] then
 		for j = 0, #self.characterdata["skinnyanimations"] do
@@ -168,7 +168,7 @@ function mario:init(x, y, i, animation, size, t, properties)
 			self.boomeranggraphic[j] = self.characterdata["boomeranganimations"][j]
 		end
 	end
-	
+
 	self.drawable = true
 	self.quad = self.characterdata["small"]["idle"][3]
 	self.quadanim = "idle"
@@ -177,26 +177,26 @@ function mario:init(x, y, i, animation, size, t, properties)
 		self.size = self.characterdata.defaultsize
 	end
 	self:setsize(self.size)
-	
+
 	if bigmario then
 		self.offsetX = self.offsetX*scalefactor
 		self.offsetY = self.offsetY*-scalefactor
 	end
-	
+
 	--hat
 	self.hats = mariohats[self.playernumber]
 	self.drawhat = true
-	
+
 	--Change height according to hats
-	
+
 	--for i = 1, #self.hats do
 		--self.height = self.height + (hat[self.hats[i]].height/16)
 		--self.y = self.y - (hat[self.hats[i]].height/16)
 		--self.offsetY = self.offsetY - hat[self.hats[i]].height
 	--end
-	
+
 	self.customscissor = nil
-	
+
 	if (players == 1 and (not CustomPortalColors)) or self.playernumber > 4 then
 		self.portal1color = getDefaultPortalColor(1)
 		self.portal2color = getDefaultPortalColor(2)
@@ -204,10 +204,10 @@ function mario:init(x, y, i, animation, size, t, properties)
 		self.portal1color = portalcolor[self.playernumber][1]
 		self.portal2color = portalcolor[self.playernumber][2]
 	end
-	
+
 	--OTHER STUFF!
 	self.controlsenabled = true
-	
+
 	self.idleframe = 1
 	self.idleanimationprogress = 1
 	self.runframe = math.min(self.characterdata.runframes, 3)
@@ -281,12 +281,12 @@ function mario:init(x, y, i, animation, size, t, properties)
 	self.mariolevel = mariolevel --level where mario is from
 	self.groundpounding = false
 	self.groundpoundcanceled = false
-	
+
 	self.animation = animation --pipedown, piperight, pipeupexit, pipeleft, flag, vine, intermission, pipeup, pipedownexit
 	self.animationx = nil
 	self.animationy = nil
 	self.animationtimer = 0
-	
+
 	self.falling = false
 	self.jumping = false
 	self.starred = false
@@ -302,7 +302,7 @@ function mario:init(x, y, i, animation, size, t, properties)
 	self.fireenemycount = {}
 	self.fireanimationtimer = fireanimationtime
 	self.spinanimationtimer = raccoonspintime
-	
+
 	--turrets
 	self.hitpoints = maxhitpoints
 	self.hitpointtimer = 0
@@ -310,7 +310,7 @@ function mario:init(x, y, i, animation, size, t, properties)
 
 	--health
 	self.health = self.characterdata.health
-	
+
 	--RACCOON STUFF
 	self.float = false
 	self.floattimer = 0
@@ -320,37 +320,37 @@ function mario:init(x, y, i, animation, size, t, properties)
 	self.playraccoonplanesound = true
 	self.raccoonflyingtimer = 0
 	self.raccoonfly = false
-	
+
 	--CAPPY
 	if playertype == "cappy" then
 		self.cappy = cappy:new(self)
 		table.insert(objects["cappy"], self.cappy)
 	end
-	
+
 	--LOOK UP/DOWN
 	self.upkeytimer = 0
 	self.downkeytimer = 0
-	
+
 	self.mazevar = 0
 
 	self.light  = 3.5
-	
+
 	self.bubbletimer = 0
 	self.bubbletime = bubblestime[math.random(#bubblestime)]
-	
+
 	if self.water then
 		self.gravity = self.characterdata.uwgravity
 	elseif currentphysics == 2 or currentphysics == 4 or currentphysics == 6 then --fall slow at start
 		self.speedy = 0
 		self.gravity = self.characterdata.yaccelerationjumping
 	end
-	
+
 	self.controlsoverwrite = {}
-	
+
 	if self.animation == "intermission" and editormode then
 		self.animation = nil
 	end
-	
+
 	if mariolivecount ~= false and type(mariolives[self.playernumber]) == "number" and mariolives[self.playernumber] <= 0 then
 		self.dead = true
 		self.drawable = false
@@ -359,7 +359,7 @@ function mario:init(x, y, i, animation, size, t, properties)
 		self.controlsenabled = false
 		self.animation = nil
 	end
-	
+
 	if self.animation and self.animation:find("pipe") then
 		local p = exitpipes[tilemap(pipestartx,pipestarty)]
 		local dir = p.dir
@@ -406,12 +406,12 @@ function mario:init(x, y, i, animation, size, t, properties)
 		self.vineanimationdropoff = false
 		self.vinemovetimer = 0
 		playsound(vinesound)
-		
+
 		if #objects["vine"] == 0 then
 			table.insert(objects["vine"], vine:new(5, mapheight+1, "start"))
 		end
 	end
-	
+
 	if properties and (not editormode) then
 		--stay shoed
 		if properties.shoe and properties.shoe ~= "cloud" then
@@ -453,7 +453,7 @@ function mario:init(x, y, i, animation, size, t, properties)
 		obj.parent = self
 		table.insert(objects["enemy"], obj)
 	end
-	
+
 	self:setquad()
 end
 
@@ -494,7 +494,7 @@ function mario:update(dt)
 		self.playraccoonplanesound = true
 		self.planetimer = 0
 	end
-	
+
 	if self.raccoonfly then
 		if (self.size == 6 or self.size == 9) then --fly as raccoon Mario
 			self.raccoonflyingtimer = self.raccoonflyingtimer + dt
@@ -564,7 +564,7 @@ function mario:update(dt)
 	if raccoonplanesound:isPlaying() and (self.planemode == false or (self.size ~= 6 and self.size ~= 9))	then
 		raccoonplanesound:stop() --stops raccoon flying sound
 	end
-	
+
 	--falling state fuck
 	if (not self.falling) and (not self.jumping) then
 		self.landed = true
@@ -589,7 +589,7 @@ function mario:update(dt)
 	end
 	if self.yoshi and self.yoshitounge and not (self.yoshispitting) then
 		self.yoshitoungewidth = math.max(0, math.min(yoshitoungemaxwidth, self.yoshitoungewidth + self.yoshitoungespeed*dt))
-		
+
 		local dirscale
 		if self.animationdirection == "left" then
 			dirscale = -scale
@@ -613,7 +613,7 @@ function mario:update(dt)
 			end
 		end
 		x, y = x+xoffset, y+yoffset
-		
+
 		if not self.yoshitoungeenemy then
 			local dobreak = false
 			for j, obj in pairs(yoshitoungekill) do
@@ -673,7 +673,7 @@ function mario:update(dt)
 				end
 			end
 		end
-		
+
 		if self.yoshitoungewidth == yoshitoungemaxwidth then
 			self.yoshitoungespeed = -yoshitoungespeed
 		elseif self.yoshitoungewidth == 0 then
@@ -691,7 +691,7 @@ function mario:update(dt)
 			end
 		end
 	end
-	
+
 	if self.size == 10 or (self.fireenemy and self.fireenemy.cape) then
 		if self.speedy > 0 and jumpkey(self.playernumber) and (not self.groundpounding) then --float
 			self.speedy = math.min(self.speedy, 6)
@@ -805,10 +805,10 @@ function mario:update(dt)
 					hitrightside()
 				end
 				splitxscroll = {xscroll}
-			end	
+			end
 		end
 	end
-	
+
 	--looking up/down
 	if upkey(self.playernumber) and self.controlsenabled then
 		self.upkeytimer = self.upkeytimer + dt
@@ -897,7 +897,7 @@ function mario:update(dt)
 		end
 		self.fallframe = math.floor(self.fallanimationprogress)
 	end
-	
+
 	--clear pipe invincibility
 	if self.clearpipeexitinvincibility and (not self.clearpipe) then
 		self.clearpipeexitinvincibility = self.clearpipeexitinvincibility - 1
@@ -918,7 +918,7 @@ function mario:update(dt)
 			end
 
 			if downkey(self.playernumber) then
-				
+
 			end
 		elseif self.shoe ~= "drybonesshell" then
 			--begin animation
@@ -939,7 +939,7 @@ function mario:update(dt)
 			self.swimwing = false
 		end
 	end
-	
+
 	--dk hammer
 	if self.dkhammer then
 		self.dkhammeranim = self.dkhammeranim + dt
@@ -951,12 +951,12 @@ function mario:update(dt)
 			end
 			self.dkhammeranim = self.dkhammeranim - dkhammeranimspeed
 		end
-		
+
 		self.dkhammer = self.dkhammer - dt
 		if self.dkhammer < 0 then
 			self.dkhammer = false
 		end
-		
+
 		if self.dkhammer then
 			local w, h = 1, 1
 			local x, y = self.x+(self.width/2)-.5, self.y-1
@@ -967,7 +967,7 @@ function mario:update(dt)
 					x, y = self.x-1, self.y+self.height-1
 				end
 			end
-			
+
 			local dobreak = false
 			for j, obj in pairs(dkhammerkill) do
 				for i, v in pairs(objects[obj]) do
@@ -990,7 +990,7 @@ function mario:update(dt)
 			end
 		end
 	end
-	
+
 	--sledge bros
 	if self.groundfreeze then
 		self.controlsenabled = false
@@ -1001,7 +1001,7 @@ function mario:update(dt)
 			self.frozen = false
 		end
 	end
-	
+
 	if underwater and not self.water then
 		self.water = true
 	end
@@ -1022,7 +1022,7 @@ function mario:update(dt)
 			end
 		end
 	end
-	
+
 	--big cloud
 	if self.cloudtimer then
 		self.cloudtimer = self.cloudtimer - dt
@@ -1088,7 +1088,7 @@ function mario:update(dt)
 			end
 		end
 	end
-	
+
 	--turrets
 	self.hitpointsdelay = math.max(0, self.hitpointsdelay - dt)
 	if self.hitpoints >= maxhitpoints and not self.dead then
@@ -1100,7 +1100,7 @@ function mario:update(dt)
 			self.hitpoints = self.hitpoints + 1
 		end
 	end
-	
+
 	self.passivemoved = false
 	--rotate back to 0 (portals)
 	if self.gravitydir == "left" then
@@ -1109,13 +1109,13 @@ function mario:update(dt)
 		self.rotation = self.rotation + math.pi*0.5
 	end
 	self.rotation = math.fmod(self.rotation, math.pi*2)
-	
+
 	if self.rotation < -math.pi then
 		self.rotation = self.rotation + math.pi*2
 	elseif self.rotation > math.pi then
 		self.rotation = self.rotation - math.pi*2
 	end
-	
+
 	if self.rotation > 0 then
 		self.rotation = self.rotation - portalrotationalignmentspeed*dt
 		if self.rotation < 0 then
@@ -1133,11 +1133,11 @@ function mario:update(dt)
 	elseif self.gravitydir == "right" then
 		self.rotation = self.rotation - math.pi*0.5
 	end
-	
+
 	if self.startimer < mariostarduration and not self.dead then
 		self.startimer = self.startimer + dt
 		self.starblinktimer = self.starblinktimer + dt
-		
+
 		local lmariostarblinkrate = mariostarblinkrate
 		if self.startimer >= mariostarduration-mariostarrunout then
 			lmariostarblinkrate = mariostarblinkrateslow
@@ -1151,10 +1151,10 @@ function mario:update(dt)
 			if self.size ~= 8 then
 				self.colors = self.characterdata.starcolors[self.starcolori]
 			end
-			
+
 			self.starblinktimer = self.starblinktimer - lmariostarblinkrate
 		end
-		
+
 		if self.startimer >= mariostarduration-mariostarrunout and self.startimer-dt < mariostarduration-mariostarrunout then
 			--check if another starman is playing
 			local starstill = false
@@ -1163,7 +1163,7 @@ function mario:update(dt)
 					starstill = true
 				end
 			end
-			
+
 			if not starstill and not levelfinished then
 				if self.size == 8 then
 					--mega mushroom
@@ -1177,7 +1177,7 @@ function mario:update(dt)
 				end
 			end
 		end
-		
+
 		if self.startimer >= mariostarduration then
 			if (self.size == 8) then
 				self.largeshrink = true --be big once shrinking is done
@@ -1185,12 +1185,12 @@ function mario:update(dt)
 			else
 				self.colors = self.basecolors
 			end
-			
+
 			self.starred = false
 			self.startimer = mariostarduration
 		end
 	end
-	
+
 	--animationS
 	if self.animation == "animationwalk" and not self.spring and not self.greenspring then
 		if self.animationmisc[2] then
@@ -1210,7 +1210,7 @@ function mario:update(dt)
 			self.y = self.animationy-1 - self.height + v*dist
 		else
 			self.y = self.animationy-1 - self.height + dist
-			
+
 			if self.animationtimer >= pipeanimationtime+pipeanimationdelay then
 				self:pipetravel()
 			end
@@ -1224,7 +1224,7 @@ function mario:update(dt)
 			self.y = self.animationy - v*dist
 		else
 			self.y = self.animationy - dist
-			
+
 			if self.animationtimer >= pipeanimationtime+pipeanimationdelay then
 				self:pipetravel()
 			end
@@ -1237,14 +1237,14 @@ function mario:update(dt)
 		if self.animationtimer < pipeanimationtime then
 			local v = (self.animationtimer/pipeanimationtime)
 			self.x = self.animationx-1-self.width + v*dist
-			
+
 			--Run animation
 			if self.animationstate == "running" then
 				self:runanimation(dt, pipeanimationrunspeed, self.characterdata.piperunanimationspeed)
 			end
 		else
 			self.x = self.animationx-1-self.width + dist
-			
+
 			if self.animationtimer >= pipeanimationtime+pipeanimationdelay then
 				self:pipetravel()
 			end
@@ -1257,14 +1257,14 @@ function mario:update(dt)
 		if self.animationtimer < pipeanimationtime then
 			local v = (self.animationtimer/pipeanimationtime)
 			self.x = self.animationx - v*dist
-			
+
 			--Run animation
 			if self.animationstate == "running" then
 				self:runanimation(dt, pipeanimationrunspeed, self.characterdata.piperunanimationspeed)
 			end
 		else
 			self.x = self.animationx - dist
-			
+
 			if self.animationtimer >= pipeanimationtime+pipeanimationdelay then
 				self:pipetravel()
 			end
@@ -1283,7 +1283,7 @@ function mario:update(dt)
 			self.drawable = true
 		else
 			self.y = self.animationy-1-self.height
-			
+
 			if self.animationtimer >= pipeanimationtime then
 				self.active = true
 				self.controlsenabled = true
@@ -1308,7 +1308,7 @@ function mario:update(dt)
 			self.drawable = true
 		else
 			self.y = self.animationy
-			
+
 			if self.animationtimer >= pipeanimationtime then
 				self.active = true
 				self.controlsenabled = true
@@ -1332,14 +1332,14 @@ function mario:update(dt)
 			local v = (1-((self.animationtimer-pipeupdelay)/pipeanimationtime))
 			self.x = self.animationx - v*dist
 			self.drawable = true
-			
+
 			--Run animation
 			if self.animationstate == "running" then
 				self:runanimation(dt, pipeanimationrunspeed, self.characterdata.piperunanimationspeed)
 			end
 		else
 			self.x = self.animationx
-			
+
 			if self.animationtimer >= pipeanimationtime then
 				self.active = true
 				self.controlsenabled = true
@@ -1363,14 +1363,14 @@ function mario:update(dt)
 			local v = (1-((self.animationtimer-pipeupdelay)/pipeanimationtime))
 			self.x = self.animationx-1-self.width + v*dist
 			self.drawable = true
-			
+
 			--Run animation
 			if self.animationstate == "running" then
 				self:runanimation(dt, pipeanimationrunspeed, self.characterdata.piperunanimationspeed)
 			end
 		else
 			self.x = self.animationx-1-self.width
-			
+
 			if self.animationtimer >= pipeanimationtime then
 				self.active = true
 				self.controlsenabled = true
@@ -1383,12 +1383,12 @@ function mario:update(dt)
 		end
 		return
 	elseif self.animation == "flag" then
-		if self.animationtimer < flagdescendtime then 	
+		if self.animationtimer < flagdescendtime then
 			flagimgy = flagy-10+1/16 + flagydistance * (self.animationtimer/flagdescendtime)
 			self.y = self.y + flagydistance/flagdescendtime * dt
-			
+
 			self.animationtimer = self.animationtimer + dt
-				
+
 			if self.y > flagy-9+4/16 + flagydistance-self.height then
 				self.y = flagy-9+4/16 + flagydistance-self.height
 				self.climbframe = 2
@@ -1401,11 +1401,11 @@ function mario:update(dt)
 					self.climbframe = 2
 				end]]
 			end
-			
+
 			self.animationdirection = "right"
 			self.animationstate = "climbing"
 			self:setquad()
-			
+
 			if self.animationtimer >= flagdescendtime then
 				flagimgy = flagy-10+1/16 + flagydistance
 				self.pointingangle = math.pi/2
@@ -1415,7 +1415,7 @@ function mario:update(dt)
 			return
 		elseif self.animationtimer < flagdescendtime+flaganimationdelay then
 			self.animationtimer = self.animationtimer + dt
-			
+
 			if self.animationtimer >= flagdescendtime+flaganimationdelay then
 				self.active = true
 				self.gravity = self.characterdata.yacceleration
@@ -1427,7 +1427,7 @@ function mario:update(dt)
 		else
 			self.animationtimer = self.animationtimer + dt
 		end
-		
+
 		local add = 6
 
 		self.flagtimer = self.flagtimer + dt
@@ -1443,7 +1443,7 @@ function mario:update(dt)
 				castleflagmove = true
 			end
 		end
-		
+
 		if (self.x >= flagx + add and self.active) or (self.speedx == 0 and self.animationstate ~= "climbing" and self.active) then
 			self.drawable = false
 			self.active = false
@@ -1455,7 +1455,7 @@ function mario:update(dt)
 				castleflagmove = true
 			end
 		end
-		
+
 		if subtractscore == true and mariotime >= 0 then
 			subtracttimer = subtracttimer + dt
 			while subtracttimer > scoresubtractspeed do
@@ -1464,7 +1464,7 @@ function mario:update(dt)
 					mariotime = math.ceil(mariotime - 1)
 					marioscore = marioscore + 50
 				end
-				
+
 				if mariotime <= 0 then
 					subtractscore = false
 					scoreringsound:stop()
@@ -1473,14 +1473,14 @@ function mario:update(dt)
 				end
 			end
 		end
-		
+
 		if castleflagmove then
 			if self.animationtimer < castlemintime then
 				castleflagtime = self.animationtimer
 				return
 			end
 			castleflagy = castleflagy - castleflagspeed*dt
-			
+
 			if castleflagy <= 0 then
 				castleflagy = 0
 				castleflagmove = false
@@ -1488,7 +1488,7 @@ function mario:update(dt)
 				castleflagtime = self.animationtimer
 			end
 		end
-		
+
 		if firework then
 			local timedelta = self.animationtimer - castleflagtime
 			for i = 1, fireworkcount do
@@ -1497,28 +1497,28 @@ function mario:update(dt)
 					table.insert(fireworks, fireworkboom:new(flagx+6, flagy-13))
 				end
 			end
-			
+
 			if timedelta > fireworkcount*fireworkdelay+endtime then
 				nextlevel()
 				return
 			end
 		end
-		
+
 		--500 points per firework, appear at 1 3 and 6 (Who came up with this?)
-		
+
 		--Run animation
 		if self.animationstate == "running" then
 			self:runanimation(dt)
 		end
 		return
-		
+
 	elseif self.animation == "axe" then
 		self.animationtimer = self.animationtimer + dt
-		
+
 		if (not bowserfall) and self.animationtimer - dt < castleanimationchaindisappear and self.animationtimer >= castleanimationchaindisappear then
 			bridgedisappear = true
 		end
-		
+
 		if bridgedisappear then
 			local v = self.axeboss
 			if v then
@@ -1535,7 +1535,7 @@ function mario:update(dt)
 						objects["tile"][tilemap(self.animationbridgex, y)] = nil
 					end
 				end
-				
+
 				if removedtile then
 					generatespritebatch()
 					playsound(bridgebreaksound)
@@ -1550,7 +1550,7 @@ function mario:update(dt)
 				end
 			end
 		end
-		
+
 		if bowserfall then
 			local v = self.axeboss
 			if v and (not v.fall) then
@@ -1564,7 +1564,7 @@ function mario:update(dt)
 				return
 			end
 		end
-		
+
 		if bowserfall and self.animationtimer - dt < castleanimationmariomove and self.animationtimer >= castleanimationmariomove then
 			self.active = true
 			self.gravity = self.characterdata.yacceleration
@@ -1572,12 +1572,12 @@ function mario:update(dt)
 			self.speedx = 4.27
 			self.animationdirection = "right"
 			self.pointingangle = -math.pi/2
-		
+
 			stopmusic()
 			love.audio.stop()
 			playsound(castleendsound)
 		end
-		
+
 		if self.speedx > 0 and self.x >= mapwidth - 8 then
 			self.x = mapwidth - 8
 			self.animationstate = "idle"
@@ -1585,16 +1585,16 @@ function mario:update(dt)
 			self:setquad()
 			self.speedx = 0
 		end
-		
+
 		if levelfinishedmisc2 == 1 then
 			if self.animationtimer - dt < castleanimationtextfirstline and self.animationtimer >= castleanimationtextfirstline then
 				levelfinishedmisc = 1
 			end
-			
+
 			if self.animationtimer - dt < castleanimationtextsecondline and self.animationtimer >= castleanimationtextsecondline then
 				levelfinishedmisc = 2
 			end
-		
+
 			if self.animationtimer - dt < castleanimationnextlevel and self.animationtimer >= castleanimationnextlevel then
 				nextlevel()
 			end
@@ -1602,42 +1602,42 @@ function mario:update(dt)
 			if self.animationtimer - dt < endanimationtextfirstline and self.animationtimer >= endanimationtextfirstline then
 				levelfinishedmisc = 1
 			end
-			
+
 			if self.animationtimer - dt < endanimationtextsecondline and self.animationtimer >= endanimationtextsecondline then
 				levelfinishedmisc = 2
 				stopmusic()
 				love.audio.stop()
 				music:play("princessmusic")
 			end
-		
+
 			if self.animationtimer - dt < endanimationtextthirdline and self.animationtimer >= endanimationtextthirdline then
 				levelfinishedmisc = 3
 			end
-			
+
 			if self.animationtimer - dt < endanimationtextfourthline and self.animationtimer >= endanimationtextfourthline then
 				levelfinishedmisc = 4
 			end
-			
+
 			if self.animationtimer - dt < endanimationtextfifthline and self.animationtimer >= endanimationtextfifthline then
 				levelfinishedmisc = 5
 			end
-		
+
 			if self.animationtimer - dt < endanimationend and self.animationtimer >= endanimationend then
 				endpressbutton = true
 			end
 		end
-		
+
 		--Run animation
 		if self.animationstate == "running" and self.animationtimer >= castleanimationmariomove then
 			self:runanimation(dt)
 		end
 		return
-		
+
 	elseif self.animation == "death" or self.animation == "deathpit" then
 		self.animationtimer = self.animationtimer + dt
 		self.animationstate = "dead"
 		self:setquad()
-		
+
 		if self.animation == "death" then
 			if self.animationtimer > deathanimationjumptime then
 				if self.animationtimer - dt < deathanimationjumptime then
@@ -1651,7 +1651,7 @@ function mario:update(dt)
 		if self.animationmisc == "everyonedead" and jumpkey(self.playernumber) and self.animationtimer > 1 then
 			self.animationtimer = deathtotaltime+1
 		end
-		
+
 		if self.animationtimer > deathtotaltime then
 			if self.animationmisc == "everyonedead" then
 				local sub = nil --mariosublevel
@@ -1669,25 +1669,25 @@ function mario:update(dt)
 				self:respawn()
 			end
 		end
-		
+
 		return
 	elseif self.animation == "intermission" and not self.spring and not self.greenspring then
 		--Run animation
 		if self.animationstate == "running" then
 			self:runanimation(dt, pipeanimationrunspeed, self.characterdata.piperunanimationspeed)
 		end
-		
+
 		return
-		
+
 	elseif self.animation == "vine" then
 		self.y = self.y - vinemovespeed*dt
-		
+
 		self.vinemovetimer = self.vinemovetimer + dt
-		
+
 		self.climbframe = math.ceil(math.fmod(self.vinemovetimer, self.characterdata.vineframedelay*self.characterdata.climbframes)/self.characterdata.vineframedelay)
 		self.climbframe = math.max(self.climbframe, 1)
 		self:setquad()
-		
+
 		if self.y < -4 then
 			levelscreen_load("vine", self.animationmisc)
 		end
@@ -1697,13 +1697,13 @@ function mario:update(dt)
 		if self.vineanimationdropoff == false and self.animationtimer - dt <= vineanimationmariostart and self.animationtimer > vineanimationmariostart then
 			self.vineanimationclimb = true
 		end
-		
+
 		if self.vineanimationclimb then
 			self.vinemovetimer = self.vinemovetimer + dt
-			
+
 			self.climbframe = math.ceil(math.fmod(self.vinemovetimer, self.characterdata.vineframedelay*self.characterdata.climbframes)/self.characterdata.vineframedelay)
 			self.climbframe = math.max(self.climbframe, 1)
-			
+
 			self.y = self.y - vinemovespeed*dt
 			if self.y <= mapheight-vineanimationgrowheight+vineanimationstop+0.4*(self.playernumber-1) then
 				self.vineanimationclimb = false
@@ -1717,28 +1717,30 @@ function mario:update(dt)
 			end
 			self:setquad()
 		end
-		
+
 		if self.vineanimationdropoff and self.animationtimer - dt <= vineanimationdropdelay and self.animationtimer > vineanimationdropdelay then
 			self.active = true
 			self.controlsenabled = true
 			self.x = self.x + 7/16
 			self.animation = false
 		end
-		
+
 		return
-	
+
 	elseif self.animation == "shrink" then
 		self.animationtimer = self.animationtimer + dt
 		--set frame lol
 		local frame = math.ceil(math.fmod(self.animationtimer, growframedelay*3)/shrinkframedelay)
 		self:updateangle()
-	
+
 		if frame == 1 then
-			self:setsize(2)
-			self:setquad("idle", 2)
+			if not nevershrink then
+				self:setsize(2)
+				self:setquad("idle", 2)
+			end
 			self.animationstate = "idle"
 		else
-			self:setsize(1)
+			-- self:setsize(1)
 			if frame == 2 then
 				self.animationstate = "grow"
 				if self.portalgun == true and not (playertype and playertype == "minecraft") then
@@ -1746,22 +1748,28 @@ function mario:update(dt)
 				else
 					self:setquad("grownogun")
 				end
-				self.quadcenterY = self.characterdata.shrinkquadcenterY2
+				if not nevershrink then
+					self.quadcenterY = self.characterdata.shrinkquadcenterY2
+				end
 			else
 				self.animationstate = "idle"
 				self:setquad()
-				self.quadcenterY = self.characterdata.smallquadcenterY
+				if not nevershrink then
+					self.quadcenterY = self.characterdata.smallquadcenterY
+				end
 			end
 		end
-		
+
 		local invis = math.ceil(math.fmod(self.animationtimer, invicibleblinktime*2)/invicibleblinktime)
-		
+
 		if invis == 1 then
 			self.drawable = true
 		else
 			self.drawable = false
 		end
-		
+
+		local oldsize = self.size
+
 		if self.animationtimer - dt < shrinktime and self.animationtimer > shrinktime then
 			self.animationstate = self.animationmisc
 			self.animation = "invincible"
@@ -1773,22 +1781,25 @@ function mario:update(dt)
 				self.size = 2
 				self:setsize(2)
 				self.largeshrink = false
-			else
+			elseif not nevershrink then
 				self:setsize(1)
+			end
+			if nevershrink then
+				self:setsize(oldsize)
 			end
 		end
 		return
 	elseif self.animation == "invincible" then
 		self.animationtimer = self.animationtimer + dt
-		
+
 		local invis = math.ceil(math.fmod(self.animationtimer, invicibleblinktime*2)/invicibleblinktime)
-		
+
 		if invis == 1 then
 			self.drawable = true
 		else
 			self.drawable = false
 		end
-		
+
 		if self.animationtimer - dt < invincibletime and self.animationtimer > invincibletime then
 			self.animation = false
 			if not levelfinished then --stay invincible if level is finished
@@ -1796,13 +1807,13 @@ function mario:update(dt)
 			end
 			self.drawable = true
 		end
-		
+
 	elseif self.animation == "grow1" then
 		self.animationtimer = self.animationtimer + dt
 		--set frame lol
 		local frame = math.ceil(math.fmod(self.animationtimer, growframedelay*3)/growframedelay)
 		self:updateangle()
-		
+
 		if frame == 3 then
 			self.animationstate = "idle"
 			self:setsize(self.size)
@@ -1820,11 +1831,13 @@ function mario:update(dt)
 			else
 				self.animationstate = "idle"
 				self:setquad(nil, 1)
-				self.quadcenterY = self.characterdata.smallquadcenterY
+				if not nevershrink then
+					self.quadcenterY = self.characterdata.smallquadcenterY
+				end
 				--self.characterdata.growquadcenterY2
 			end
 		end
-		
+
 		if self.animationtimer - dt < growtime and self.animationtimer > growtime then
 			self.animationstate = self.animationmisc
 			self.animation = false
@@ -1832,15 +1845,15 @@ function mario:update(dt)
 			self:setsize(self.size)
 		end
 		return
-		
+
 	elseif self.animation == "grow2" then
 		self.animationtimer = self.animationtimer + dt
 		--set frame lol
 		local frame = math.ceil(math.fmod(self.animationtimer, growframedelay*3)/growframedelay)
 		self:updateangle()
-		
+
 		self.colors = self.characterdata.starcolors[frame]
-		
+
 		if self.animationtimer - dt < growtime and self.animationtimer > growtime then
 			self.animation = false
 			noupdate = false
@@ -1949,11 +1962,11 @@ function mario:update(dt)
 		end
 		return
 	end
-	
+
 	if noupdate then
 		return
 	end
-	
+
 	if self.fireanimationtimer < fireanimationtime then
 		self.fireanimationtimer = self.fireanimationtimer + dt
 		if self.fireanimationtimer > fireanimationtime then
@@ -1961,7 +1974,7 @@ function mario:update(dt)
 			self.fireenemyfireanim = nil
 		end
 	end
-	
+
 	if self.spinanimationtimer < raccoonspintime then
 		self.spinanimationprogress = self.spinanimationprogress + dt*raccoonspinanimationspeed
 		while self.spinanimationprogress >= 4 do
@@ -2028,18 +2041,18 @@ function mario:update(dt)
 			end
 		end
 	end
-	
+
 	--vine controls and shit
 	if self.vine then
 		self.animationstate = "climbing"
 		if upkey(self.playernumber) and self.controlsenabled then
 			self.vinemovetimer = self.vinemovetimer + dt
-			
+
 			self.climbframe = math.ceil(math.fmod(self.vinemovetimer, self.characterdata.vineframedelay*self.characterdata.climbframes)/self.characterdata.vineframedelay)
 			self.climbframe = math.max(self.climbframe, 1)
-			
+
 			self.y = self.y-vinemovespeed*dt
-			
+
 			local t = checkrect(self.x, self.y, self.width, self.height, {"tile", "portalwall"}, nil, "ignoreplatforms")
 			if #t ~= 0 then
 				self.y = objects[t[1]][t[2]].y + objects[t[1]][t[2]].height
@@ -2047,14 +2060,14 @@ function mario:update(dt)
 			end
 		elseif downkey(self.playernumber) and self.controlsenabled then
 			self.vinemovetimer = self.vinemovetimer + dt
-			
+
 			self.climbframe = math.ceil(math.fmod(self.vinemovetimer, self.characterdata.vineframedelay*self.characterdata.climbframes)/self.characterdata.vineframedelay)
 			self.climbframe = math.max(self.climbframe, 1)
-			
+
 			checkportalHOR(self, self.y+vinemovedownspeed*dt)
-			
+
 			self.y = self.y+vinemovedownspeed*dt
-			
+
 			local t = checkrect(self.x, self.y, self.width, self.height, {"tile", "portalwall"}, nil, "ignoreplatforms")
 			if #t ~= 0 then
 				self.y = objects[t[1]][t[2]].y - self.height
@@ -2075,11 +2088,11 @@ function mario:update(dt)
 				self:dropvine(self.vineside)
 			end
 		end
-			
+
 		if self.vine == "entity" and self.y+self.height <= vineanimationstart and (not self.vineb.vinestop) and (not self.vineb.moving) then
 			self:vineanimation()
 		end
-		
+
 		--check if still on vine
 		if self.vine == "tile" then
 			--vine tile
@@ -2094,7 +2107,7 @@ function mario:update(dt)
 				self:dropvine(self.vineside)
 			end
 		end
-		
+
 		self:setquad()
 		return
 	end
@@ -2140,7 +2153,7 @@ function mario:update(dt)
 				targetspeedy = 0
 			else
 				self:dropfence()
-			end	
+			end
 		end
 
 		self.speedx = targetspeedx
@@ -2167,7 +2180,7 @@ function mario:update(dt)
 			end
 		end
 	end
-	
+
 	--springs
 	if self.spring then
 		self.x = self.springx
@@ -2182,7 +2195,7 @@ function mario:update(dt)
 		end
 		return
 	end
-	
+
 	--green springs
 	if self.springgreen then
 		self.x = self.springgreenx
@@ -2193,7 +2206,7 @@ function mario:update(dt)
 		end
 		return
 	end
-	
+
 	--noteblock (a lot more complicated than I wanted it to be)
 	if self.noteblock then
 		--get block bounce (wish it didn't work like this)
@@ -2217,7 +2230,7 @@ function mario:update(dt)
 				if v.x == self.noteblock[1] then
 					bounceyoffset = bounce
 				elseif v.x == self.noteblock[1]-1 then
-					bounceyoffsetleft = bounce 
+					bounceyoffsetleft = bounce
 				elseif v.x == self.noteblock[1]+1 then
 					bounceyoffsetright = bounce
 				end
@@ -2262,7 +2275,7 @@ function mario:update(dt)
 			self.y = self.noteblock[2]-1-self.height-bounceyoffset
 			--self.x = math.max(self.noteblock[1]-1-self.width, math.min(self.noteblock[1], self.x))
 			if self.x+self.width > self.noteblock[1] and inmap(self.noteblock[1]+1, self.noteblock[2])
-				and tilequads[map[self.noteblock[1]+1][self.noteblock[2]][1]]["collision"] 
+				and tilequads[map[self.noteblock[1]+1][self.noteblock[2]][1]]["collision"]
 				and not (bounceyoffsetright and bounceyoffsetright == bounceyoffset) then
 				self.x = self.noteblock[1]-self.width
 			elseif self.x < self.noteblock[1]-1 and inmap(self.noteblock[1]-1, self.noteblock[2])
@@ -2283,7 +2296,7 @@ function mario:update(dt)
 			if self.speedx > 0 then
 				if self.speedx > maxrunspeed then
 					self.speedx = self.speedx - self.superfriction*dt
-				else	
+				else
 					self.speedx = self.speedx - self.friction*dt
 				end
 				if self.speedx < self.minspeed then
@@ -2294,7 +2307,7 @@ function mario:update(dt)
 			else
 				if self.speedx < -maxrunspeed then
 					self.speedx = self.speedx + self.superfriction*dt
-				else	
+				else
 					self.speedx = self.speedx + self.friction*dt
 				end
 				if self.speedx > -self.minspeed then
@@ -2317,9 +2330,9 @@ function mario:update(dt)
 			self.noteblock2 = false
 		end
 	end
-	
-	
-	
+
+
+
 	--mazegate
 	local x = math.floor(self.x+self.width/2)+1
 	local y = math.floor(self.y+self.height/2)+1
@@ -2327,20 +2340,20 @@ function mario:update(dt)
 		if map[x][y][3] == self.mazevar + 1 then
 			self.mazevar = self.mazevar + 1
 		elseif map[x][y][3] == self.mazevar then
-			
+
 		else
 			self.mazevar = 0
 		end
 	end
-	
+
 	--axe
 	local x = math.floor(self.x+self.width/2)+1
 	local y = math.floor(self.y+self.height/2)+1
-	
+
 	if axex and x == axex and y == axey then
 		self:axe()
 	end
-	
+
 	if self.controlsenabled then
 		if self.jumping then
 			local grav = self.characterdata.yaccelerationjumping
@@ -2357,7 +2370,7 @@ function mario:update(dt)
 			else
 				self.gravity = grav
 			end
-			
+
 			if (self.gravitydir == "down" and self.speedy > 0) or (self.gravitydir == "up" and self.speedy < 0)
 			or (self.gravitydir == "right" and self.speedx > 0) or (self.gravitydir == "left" and self.speedx < 0) then
 				self.jumping = false
@@ -2370,14 +2383,14 @@ function mario:update(dt)
 			elseif self.size == -1 then
 				grav = self.characterdata.tinymariogravity
 			end
-			
+
 			if self.water then
 				self.gravity = self.characterdata.uwyacceleration
 			else
 				self.gravity = grav
 			end
 		end
-		
+
 		--check for pipe pipe pipe
 		if downkey(self.playernumber) and self.falling == false and self.jumping == false then
 			for i, p in pairs(pipes) do
@@ -2388,14 +2401,14 @@ function mario:update(dt)
 				end
 			end
 		end
-		
+
 		--door
 		if inmap(x, y) and #map[x][y] > 1 and entityquads[map[x][y][2]] and entityquads[map[x][y][2]].t == "door" and self.controlsenabled and (not editormode) and upkey(self.playernumber) and self.falling == false and self.jumping == false then
 			self:door(x, y, map[x][y][3])
 			net_action(self.playernumber, "door|" .. x .. "|" .. y .. "|" .. map[x][y][3])
 			return
 		end
-		
+
 		--ice
 		self.ice = false
 		if self.tileice then --moving tiles i guess
@@ -2435,15 +2448,15 @@ function mario:update(dt)
 				self.friction = self.characterdata.friction
 			end
 		end
-		
+
 		self:updateangle()
-		
+
 		--Portaldots
 		self.portaldotstimer = self.portaldotstimer + dt
 		while self.portaldotstimer > portaldotstime do
 			self.portaldotstimer = self.portaldotstimer - portaldotstime
 		end
-		
+
 		if self.size == 9 then --tanooki statue
 			if (not self.ducking) and (not self.shoe) and (not self.yoshi) and downkey(self.playernumber) then
 				if (not self.statue) and runkey(self.playernumber) then
@@ -2465,7 +2478,7 @@ function mario:update(dt)
 				self.statuetimer = false
 			end
 		end
-		
+
 		if self.falling == false and self.jumping == false and self.groundpounding == false then
 			if self.shoe == "drybonesshell" then
 				if downkey(self.playernumber) then
@@ -2532,12 +2545,12 @@ function mario:update(dt)
 		if self.redseesaw then
 			self.redseesaw = self.redseesaw - dt
 		end
-		
+
 		--self.water = underwater
 		if not underwater then
 			local x = math.floor(self.x+self.width/2)+1
 			local y = math.floor(self.y+self.height/2)+1
-			
+
 			if inmap(x, y) then
 				if tilequads[map[x][y][1]]:getproperty("water", x, y) then
 					if not self.water then
@@ -2555,13 +2568,13 @@ function mario:update(dt)
 			end
 		end
 		self.risingwater = false
-		
+
 		if self.water == false then
 			self:movement(dt)
 		else
 			self:underwatermovement(dt)
 		end
-		
+
 		--lava
 		local y2 = math.floor(self.y)+1
 		if inmap(x, y) and tilequads[map[x][y][1]]:getproperty("lava", x, y) then
@@ -2581,7 +2594,7 @@ function mario:update(dt)
 				self:die("lava")
 			end
 		end
-		
+
 		--vine tiles
 		if (not self.vine) and (not self.yoshi) and self.size ~= 8 and self.size ~= 16 then
 			local x = math.floor(self.x+self.width/2)+1
@@ -2592,7 +2605,7 @@ function mario:update(dt)
 				end
 			end
 		end
-		
+
 		if self.gravitydir == "up" and self.y < 0 then
 			self:die("pit")
 		elseif (self.gravitydir == "left" or self.gravitydir == "right") and (self.y < 0 or self.y >= mapheight) then
@@ -2602,47 +2615,47 @@ function mario:update(dt)
 		elseif flagx and self.x+self.width >= flagx+6/16 and (flagborder or (self.x <= flagx+10/16 and self.y < flagy+1)) and self.y > flagy-10.8 then
 			self:flag()
 		end
-		
+
 		if firestartx and self.x >= firestartx - 1 then
 			firestarted = true
 		end
-		
+
 		if flyingfishstartx and self.x >= flyingfishstartx - 1 then
 			flyingfishstarted = true
 		end
-		
+
 		if flyingfishendx and self.x >= flyingfishendx - 1 then
 			flyingfishstarted = false
 		end
-		
+
 		if meteorstartx and self.x >= meteorstartx - 1 then
 			meteorstarted = true
 		end
-		
+
 		if meteorendx and self.x >= meteorendx - 1 then
 			meteorstarted = false
 		end
-		
+
 		if bulletbillstartx and self.x >= bulletbillstartx - 1 then
 			bulletbillstarted = true
 		end
-		
+
 		if bulletbillendx and self.x >= bulletbillendx - 1 then
 			bulletbillstarted = false
 		end
-		
+
 		if windstartx and self.x >= windstartx - 1 then
 			windstarted = true
 		end
-		
+
 		if windendx and self.x >= windendx - 1 then
 			windstarted = false
 		end
-		
+
 		if lakitoendx and self.x >= lakitoendx then
 			lakitoend = true
 		end
-		
+
 		if angrysunendx and self.x >= angrysunendx then
 			angrysunend = true
 		end
@@ -2653,7 +2666,7 @@ function mario:update(dt)
 			self:underwatermovement(dt)
 		end
 	end
-	
+
 	--checkpoints
 	local checkx = checkpoints[checkpointi+1]
 	if checkx then
@@ -2664,10 +2677,10 @@ function mario:update(dt)
 			checkpointsublevel = actualsublevel
 		end
 	end
-	
+
 	--drains
 	local x = math.floor(self.x+self.width/2)+1
-	
+
 	if inmap(x, mapheight) and #map[x][mapheight] > 1 and map[x][mapheight][2] and entityquads[map[x][mapheight][2]].t and entityquads[map[x][mapheight][2]].t == "drain" then
 		if self.speedy < drainmax then
 			if self.frog then --frog
@@ -2677,7 +2690,7 @@ function mario:update(dt)
 			end
 		end
 	end
-	
+
 	self:setquad()
 end
 
@@ -2714,14 +2727,14 @@ function mario:updateangle()
 	if self.disableaiming then
 		return false
 	end
-	
+
 	if self.playernumber == mouseowner then
 		local scale = scale
 		if shaders and shaders.scale then scale = shaders.scale end
 		self.pointingangle = math.atan2(self.x+self.portalsourcex-xscroll-(love.mouse.getX()/screenzoom/16/scale), (self.y+self.portalsourcey-yscroll-.5)-(love.mouse.getY()/screenzoom/16/scale))
 	elseif #controls[self.playernumber]["aimx"] > 0 then
 		local x, y
-		
+
 		local s = controls[self.playernumber]["aimx"]
 		if s[1] == "joy" then
 			x = -love.joystick.getAxis(s[2], s[4])
@@ -2729,7 +2742,7 @@ function mario:updateangle()
 				x = -x
 			end
 		end
-		
+
 		s = controls[self.playernumber]["aimy"]
 		if s[1] == "joy" then
 			y = -love.joystick.getAxis(s[2], s[4])
@@ -2737,11 +2750,11 @@ function mario:updateangle()
 				y = -y
 			end
 		end
-		
+
 		if not x or not y then
 			return
 		end
-		
+
 		if math.abs(x) > joystickaimdeadzone or math.abs(y) > joystickaimdeadzone then
 			self.pointingangle = math.atan2(x, y)
 			if self.pointingangle == 0 then
@@ -2775,11 +2788,11 @@ function mario:movement(dt)
 				end
 			end
 		end
-		
+
 		--On Lightbridge
 		local x = round(self.x+self.width/2+.5)
 		local y = round(self.y+self.height+1)
-		
+
 		for i, v in pairs(objects["lightbridgebody"]) do
 			if x == v.cox and y == v.coy and v.gels.top then
 				if v.gels.top == 1 then
@@ -2790,7 +2803,7 @@ function mario:movement(dt)
 			end
 		end
 
-		
+
 		for i, v in pairs(objects["belt"]) do
 			if y == v.y+1 then
 				local id = v:getgel(math.floor(self.x+self.width/2)+1)
@@ -2817,7 +2830,7 @@ function mario:movement(dt)
 				return
 			end
 		end
-		
+
 		if self.ice then
 			walkacceleration = self.characterdata.icewalkacceleration
 			runacceleration = self.characterdata.icerunacceleration
@@ -2846,7 +2859,7 @@ function mario:movement(dt)
 			end
 		end
 	end
-		
+
 	--HORIZONTAL MOVEMENT
 	local runningkey = runkey(self.playernumber)
 	local mariojumpkey = jumpkey(self.playernumber)
@@ -2902,8 +2915,8 @@ function mario:movement(dt)
 			end
 		end
 	end
-	
-	
+
+
 	if self.controlsenabled and self.shoe == "cloud" then
 		if upkey(self.playernumber) and self.y > -4 then
 			self.speedy = math.max(-cloudspeed, self.speedy - cloudacceleration*dt)
@@ -2944,7 +2957,7 @@ function mario:movement(dt)
 					else
 						self[speedx] = self[speedx] + self.characterdata.runaccelerationair*dt
 					end
-					
+
 					self[speedx] = math.min(self[speedx], maxwalkspeed)
 				elseif self[speedx] > maxwalkspeed and self[speedx] < maxrunspeed then
 					if self[speedx] < 0 then
@@ -2952,10 +2965,10 @@ function mario:movement(dt)
 					else
 						self[speedx] = self[speedx] + self.characterdata.runaccelerationair*dt
 					end
-					
+
 					self[speedx] = math.min(self[speedx], maxrunspeed)
 				end
-					
+
 			elseif self.ducking == false then --ON GROUND
 				if self[speedx] < 0 then
 					if self[speedx] > maxrunspeed then
@@ -2978,7 +2991,7 @@ function mario:movement(dt)
 				else
 					self.animationdirection = "right"
 				end
-				
+
 				self[speedx] = math.min(self[speedx], maxrunspeed)
 				if self.size == 14 and self[speedx] == maxrunspeed and (not self.shoe) and (not self.pickup) and (not self.helmet) then --get into blueshell
 					self:duck(true)
@@ -2987,7 +3000,7 @@ function mario:movement(dt)
 					self[speedy] = -goombashoehop; if self.shoe == "heel" then playsound(heelsound); heelsound:setPitch(1+(math.random(1,10)/20-.25)) end
 				end
 			end
-			
+
 		elseif marioleftkey and not self.statue then --MOVEMENT LEFT
 			if self.jumping or self.falling then --IN AIR
 				if self[speedx] > -maxwalkspeed then
@@ -2996,7 +3009,7 @@ function mario:movement(dt)
 					else
 						self[speedx] = self[speedx] - self.characterdata.runaccelerationair*dt
 					end
-					
+
 					self[speedx] = math.max(self[speedx], -maxwalkspeed)
 				elseif self[speedx] < -maxwalkspeed and self[speedx] > -maxrunspeed then
 					if self[speedx] > 0 then
@@ -3004,10 +3017,10 @@ function mario:movement(dt)
 					else
 						self[speedx] = self[speedx] - self.characterdata.runaccelerationair*dt
 					end
-					
+
 					self[speedx] = math.max(self[speedx], -maxrunspeed)
 				end
-				
+
 			elseif self.ducking == false then --ON GROUND
 				if self[speedx] > 0 then
 					if self[speedx] < -maxrunspeed then
@@ -3030,7 +3043,7 @@ function mario:movement(dt)
 				else
 					self.animationdirection = "left"
 				end
-				
+
 				self[speedx] = math.max(self[speedx], -maxrunspeed)
 				if self.size == 14 and self[speedx] == -maxrunspeed and (not self.shoe) and (not self.pickup) and (not self.helmet) then --get into blueshell
 					self:duck(true)
@@ -3060,7 +3073,7 @@ function mario:movement(dt)
 				if self[speedx] > 0 then
 					if self[speedx] > maxrunspeed then
 						self[speedx] = self[speedx] - self.superfriction*dt
-					else	
+					else
 						self[speedx] = self[speedx] - self.friction*dt
 					end
 					if self[speedx] < self.minspeed then
@@ -3082,7 +3095,7 @@ function mario:movement(dt)
 				end
 			end
 		end
-		
+
 	else --WALKING
 		if self.controlsenabled and mariorightkey and not self.statue then --MOVEMENT RIGHT
 			if self.jumping or self.falling then --IN AIR
@@ -3092,7 +3105,7 @@ function mario:movement(dt)
 					else
 						self[speedx] = self[speedx] + self.characterdata.walkaccelerationair*dt
 					end
-					
+
 					self[speedx] = math.min(self[speedx], maxwalkspeed)
 				end
 			elseif self.ducking == false then --ON GROUND
@@ -3113,7 +3126,7 @@ function mario:movement(dt)
 					else
 						self.animationdirection = "right"
 					end
-					
+
 					self[speedx] = math.min(self[speedx], maxwalkspeed)
 				else
 					self[speedx] = self[speedx] - self.friction*dt
@@ -3123,7 +3136,7 @@ function mario:movement(dt)
 					self[speedy] = -goombashoehop; if self.shoe == "heel" then playsound(heelsound); heelsound:setPitch(1+(math.random(1,10)/20-.25)) end
 				end
 			end
-			
+
 		elseif self.controlsenabled and marioleftkey and not self.statue then --MOVEMENT LEFT
 			if self.jumping or self.falling then --IN AIR
 				if self[speedx] > -maxwalkspeed then
@@ -3132,7 +3145,7 @@ function mario:movement(dt)
 					else
 						self[speedx] = self[speedx] - self.characterdata.walkaccelerationair*dt
 					end
-					
+
 					self[speedx] = math.max(self[speedx], -maxwalkspeed)
 				end
 			elseif self.ducking == false then --ON GROUND
@@ -3153,7 +3166,7 @@ function mario:movement(dt)
 					else
 						self.animationdirection = "left"
 					end
-					
+
 					self[speedx] = math.max(self[speedx], -maxwalkspeed)
 				else
 					self[speedx] = self[speedx] + self.friction*dt
@@ -3183,7 +3196,7 @@ function mario:movement(dt)
 				if self[speedx] > 0 then
 					if self[speedx] > maxrunspeed then
 						self[speedx] = self[speedx] - self.superfriction*dt
-					else	
+					else
 						self[speedx] = self[speedx] - self.friction*dt
 					end
 					if self[speedx] < 0 then
@@ -3194,7 +3207,7 @@ function mario:movement(dt)
 				else
 					if self[speedx] < -maxrunspeed then
 						self[speedx] = self[speedx] + self.superfriction*dt
-					else	
+					else
 						self[speedx] = self[speedx] + self.friction*dt
 					end
 					if self[speedx] > 0 then
@@ -3273,7 +3286,7 @@ function mario:underwatermovement(dt)
 			self:runanimation(dt)
 		end
 	end
-	
+
 	--bubbles
 	self.bubbletimer = self.bubbletimer + dt
 	while self.bubbletimer > self.bubbletime do
@@ -3281,8 +3294,8 @@ function mario:underwatermovement(dt)
 		self.bubbletime = bubblestime[math.random(#bubblestime)]
 		table.insert(bubbles, bubble:new(self.x+8/12, self.y+2/12))
 	end
-	
-	--HORIZONTAL MOVEMENT	
+
+	--HORIZONTAL MOVEMENT
 	if self.controlsenabled and mariorightkey and not self.statue and not (self.ducking and not (self.jumping or self.falling)) then --MOVEMENT RIGHT
 		self.animationdirection = "right"
 		if self.jumping or self.falling then --IN AIR
@@ -3297,7 +3310,7 @@ function mario:underwatermovement(dt)
 					else
 						self[speedx] = self[speedx] + self.characterdata.uwwalkaccelerationair*dt
 					end
-					
+
 					if self[speedx] > max then
 						self[speedx] = max
 					end
@@ -3318,7 +3331,7 @@ function mario:underwatermovement(dt)
 					self.animationstate = "running"
 					self.animationdirection = "right"
 				end
-				
+
 				if self[speedx] > self.characterdata.uwmaxwalkspeed then
 					self[speedx] = self.characterdata.uwmaxwalkspeed
 				end
@@ -3329,7 +3342,7 @@ function mario:underwatermovement(dt)
 				end
 			end
 		end
-		
+
 	elseif self.controlsenabled and marioleftkey and not self.statue and not (self.ducking and not (self.jumping or self.falling)) then --MOVEMENT LEFT
 		self.animationdirection = "left"
 		if self.jumping or self.falling then --IN AIR
@@ -3344,7 +3357,7 @@ function mario:underwatermovement(dt)
 					else
 						self[speedx] = self[speedx] - self.characterdata.uwwalkaccelerationair*dt
 					end
-				
+
 					if self[speedx] < -max then
 						self[speedx] = -max
 					end
@@ -3365,7 +3378,7 @@ function mario:underwatermovement(dt)
 					self.animationstate = "running"
 					self.animationdirection = "left"
 				end
-				
+
 				if self[speedx] < -self.characterdata.uwmaxwalkspeed then
 					self[speedx] = -self.characterdata.uwmaxwalkspeed
 				end
@@ -3376,7 +3389,7 @@ function mario:underwatermovement(dt)
 				end
 			end
 		end
-	
+
 	else --NO MOVEMENT
 		if self.jumping or self.falling then
 			if self[speedx] > 0 then
@@ -3396,7 +3409,7 @@ function mario:underwatermovement(dt)
 			if self[speedx] > 0 then
 				if self[speedx] > self.characterdata.uwmaxrunspeed then
 					self[speedx] = self[speedx] - self.uwsuperfriction*dt
-				else	
+				else
 					self[speedx] = self[speedx] - self.uwfriction*dt
 				end
 				if self[speedx] < 0 then
@@ -3407,7 +3420,7 @@ function mario:underwatermovement(dt)
 			else
 				if self[speedx] < -self.characterdata.uwmaxrunspeed then
 					self[speedx] = self[speedx] + self.uwsuperfriction*dt
-				else	
+				else
 					self[speedx] = self[speedx] + self.uwfriction*dt
 				end
 				if self[speedx] > 0 then
@@ -3418,11 +3431,11 @@ function mario:underwatermovement(dt)
 			end
 		end
 	end
-	
+
 	if self.y+self.height < uwmaxheight and underwater then
 		self.speedy = uwpushdownspeed
 	end
-	
+
 	if self.frog then --frog movement
 		if (self.jumping or self.falling) then
 			self.gravity = 0
@@ -3434,7 +3447,7 @@ function mario:underwatermovement(dt)
 				end
 			end
 		end
-		
+
 		if self.controlsenabled and downkey(self.playernumber) then
 			self.speedy = math.min(self.speedy + 20*dt, 5)
 			self.gravity = 0
@@ -3452,7 +3465,7 @@ function mario:underwatermovement(dt)
 			self.animationstate = "jumping"
 			self:setquad()
 		end
-		
+
 		if self.controlsenabled and leftkey(self.playernumber) and self.frog then
 			if self.jumping or self.falling then
 				self.gravity = 0
@@ -3473,7 +3486,7 @@ function mario:underwatermovement(dt)
 
 		if leftkey(self.playernumber) or rightkey(self.playernumber) or downkey(self.playernumber) or upkey(self.playernumber) then
 			if self.characterdata.swimpushframes > 0 then
-				if (not self.swimpush) then 
+				if (not self.swimpush) then
 					self.swimpush = 1
 				end
 			end
@@ -3486,7 +3499,7 @@ function mario:setquad(anim, s)
 	if playertype == "minecraft" then
 		angleframe = 5
 	end
-	
+
 	if self.shoe then
 		if self.yoshi then
 			local animationstate = anim or self.animationstate
@@ -3529,7 +3542,7 @@ function mario:setquad(anim, s)
 	local animationstate = anim or self.animationstate
 	local size = s or self.size
 	local t = self.characterdata
-	
+
 	local set = "big"
 	local smallset = false --dying animation, no ducking, etc.
 	if size == 1 or size == 16 then
@@ -3653,7 +3666,7 @@ end
 
 function mario:jump(force)
 	if self.disablejumping then --animationS
-		return false	
+		return false
 	end
 
 	if self.statue or self.capefly or self.clearpipe or self.groundpounding then
@@ -3669,9 +3682,9 @@ function mario:jump(force)
 		end
 		if self.raccoonfly and (self.size == 6 or self.size == 9) then --fly as raccoon Mario
 			self.speedy = math.min(-self.characterdata.raccoonflyjumpforce, self.speedy)
-		end		
+		end
 		self.redseesaw = false
-		
+
 		if not self.water then
 			if (self.gravitydir == "left" or self.gravitydir == "right") and self.speedx ~= 0 then
 				return false
@@ -3689,25 +3702,25 @@ function mario:jump(force)
 					self:dropvine(self.vineside)
 					self.falling = false
 				end
-				
+
 				if self.fence then
 					self:dropfence()
 					self.fencejumptimer = fencejumptime
 					self.falling = false
 				end
-				
+
 				if self.shoe and (((not lowgravity) and (self.speedy > 8 or self.speedy < -goombashoehop)) or (lowgravity and (self.speedy > 4.5 or self.speedy < -goombashoehop))) then
 					return
 				elseif self.shoe == "drybonesshell" and self.ducking then
 					return
 				end
-				
+
 				--[[if self.capefly and self.speedy > 0 and self.capeflyframe < 5 and self.capeflyframe ~= 1 then
 					self.capeflyframe = 1
 					self.capeflybounce = false
 					self.speedy = -30
 				end]]
-				
+
 				if ( ((self.animation ~= "grow1" and self.animation ~= "grow2") or self.falling)
 					and (self.falling == false or self.animation == "grow1" or self.animation == "grow2" or (self.shoe and (not self.yoshi) and self.landed)) )
 					or ( (self.characterdata.doublejump or self.characterdata.dbljmppls) and (not self.hasdoublejumped) ) then
@@ -3730,7 +3743,7 @@ function mario:jump(force)
 
 					self.falloverride = false
 					self.falloverridestrict = false
-					
+
 					local jumpforce, jumpforceadd = self.characterdata.jumpforce, self.characterdata.jumpforceadd
 					if currentphysics == 7 then -- portal physics; jump one block
 						jumpforce, jumpforceadd = portalphysicsjumpforce, portalphysicsjumpforceadd
@@ -3821,11 +3834,12 @@ function mario:jump(force)
 			end
 			if not self.frog then --don't use bad swimming when frog mario
 				playsound(swimsound)
-				
+
 				local speedx = self.speedx
 				if self.gravitydir == "right" or self.gravitydir == "left" then
 					speedx = self.speedy
 				end
+
 				local force = self.characterdata.uwjumpforce + (math.abs(speedx) / self.characterdata.maxrunspeed)*self.characterdata.uwjumpforceadd
 				if self.gravitydir == "up" then
 					self.speedy = force
@@ -3839,7 +3853,7 @@ function mario:jump(force)
 
 				self.jumping = true
 				if self.characterdata.swimpushframes > 0 then
-					if (not self.swimpush) then 
+					if (not self.swimpush) then
 						self.swimpush = 1
 					else
 						self.swimpush = ((self.swimpush-1)%3)+1
@@ -3853,7 +3867,7 @@ function mario:jump(force)
 		if self.size > 1 then
 			local x = round(self.x+self.width/2+.5)
 			local y = round(self.y)
-			
+
 			if inmap(x, y) and tilequads[map[x][y][1]]:getproperty("collision", x, y) then
 				if getPortal(x, y) then
 					--self.speedy = 0
@@ -3865,7 +3879,7 @@ function mario:jump(force)
 			end
 		end
 	end
-	
+
 	if not noupdate and self.controlsenabled then
 		if not self.water then
 			if self.springgreen then
@@ -4012,7 +4026,7 @@ function mario:grow(update)
 	if (CLIENT or SERVER) and self.playernumber > 1 and not self.netaction then --netplay grow
 		return
 	end
-	
+
 	if self.characterdata.health then
 		playsound(mushroomeatsound)
 		self.health = math.min(self.characterdata.health, self.health + 1)
@@ -4034,7 +4048,7 @@ function mario:grow(update)
 	else
 		playsound(mushroomeatsound)
 	end
-	
+
 	if mariomakerphysics and (not update) and self.size >= 2 then
 		--mushroom doesn't make big mario grow
 		return
@@ -4052,7 +4066,7 @@ function mario:grow(update)
 		end
 		return
 	end
-	
+
 	if self.size > 2 then
 		if update then
 			self.size = update
@@ -4068,13 +4082,16 @@ function mario:grow(update)
 		else
 			self.size = update or 2
 		end
+		if alwaysfiery and self.size == 2 then
+			self.size = 3
+		end
 		self:setsize(self.size)
-		
+
 		self.drawable = true
 		self.invincible = false
 		self.animationtimer = 0
 		noupdate = true
-		
+
 		if self.size == 2 or self.size == -1 or (oldsize <= 1 and self.size == 12) then
 			self.animation = "grow1"
 		elseif (self.size == 8 or self.size == 16) then
@@ -4092,7 +4109,7 @@ end
 
 function mario:shrink()
 	raccoonplanesound:stop() --stops raccoon flying sound
-	
+
 	if self.animation then
 		return
 	end
@@ -4108,7 +4125,7 @@ function mario:shrink()
 		return false
 	end
 	self.animationmisc = self.animationstate
-	
+
 	playsound(shrinksound)
 
 	if self.size == 2 or (self.size > 2 and (not mariomakerphysics)) then
@@ -4116,7 +4133,7 @@ function mario:shrink()
 			self:duck(false)
 		end
 	end
-	
+
 	if mariomakerphysics and self.size > 2 and self.size ~= 12 and self.size ~= 8 then --shrink to big mario
 		self.size = 2
 		self:setsize(2)
@@ -4126,19 +4143,21 @@ function mario:shrink()
 		self.animation = "invincible"
 		return
 	end
-	
-	self.size = 1
-	self:setsize(1)
-	
+
+	if not nevershrink then
+		self.size = 1
+		self:setsize(1)
+	end
+
 	self.animation = "shrink"
 	self.drawable = true
 	self.invincible = true
 	self.animationtimer = 0
 
 	self.fireenemy = false
-	
+
 	noupdate = true
-end	
+end
 
 function mario:setsize(size, oldsize)
 	if self.characterdata.health then
@@ -4156,7 +4175,7 @@ function mario:setsize(size, oldsize)
 	local width, height = self.width, self.height
 	self.animationscalex = false
 	self.animationscaley = false
-	
+
 	self.portalsourcex = 6/16
 	self.portalsourcey = 6/16
 
@@ -4164,7 +4183,16 @@ function mario:setsize(size, oldsize)
 
 	if size == 1 then --small mario
 		width, height = 12/16, 12/16
-		self.basecolors = mariocolors[self.playernumber]
+		if alwaysfiery then
+			self:setbasecolors("flowercolor")
+			if self.firegraphic then
+				self.graphic = self.firegraphic
+			else
+				self.graphic = self.biggraphic
+			end
+		else
+			self.basecolors = mariocolors[self.playernumber]
+		end
 		self.graphic = self.smallgraphic
 		self.quadcenterX = self.characterdata.smallquadcenterX
 		self.quadcenterY = self.characterdata.smallquadcenterY
@@ -4235,10 +4263,10 @@ function mario:setsize(size, oldsize)
 		self.quadcenterY = self.characterdata.hugequadcenterY
 		self.offsetX = self.characterdata.hugeoffsetX
 		self.offsetY = self.characterdata.hugeoffsetY
-		
+
 		self.animationscalex = 3
 		self.animationscaley = 3
-		
+
 		if not oldsize or oldsize ~= self.size then
 			self.drawable = true
 			self.invincible = false
@@ -4332,10 +4360,10 @@ function mario:setsize(size, oldsize)
 		self.quadcenterY = self.characterdata.hugeclassicquadcenterY
 		self.offsetX = self.characterdata.hugeclassicoffsetX
 		self.offsetY = self.characterdata.hugeclassicoffsetY
-		
+
 		self.animationscalex = 2
 		self.animationscaley = 2
-		
+
 		if not oldsize or oldsize ~= self.size then
 			self.drawable = true
 		end
@@ -4359,7 +4387,7 @@ function mario:setsize(size, oldsize)
 		self.quadcenterY = self.characterdata.tinyquadcenterY
 		self.offsetX = self.characterdata.tinyoffsetX
 		self.offsetY = self.characterdata.tinyoffsetY
-		
+
 		self.portalsourcex = 3/16
 		self.portalsourcey = 3/16
 
@@ -4383,7 +4411,7 @@ function mario:setsize(size, oldsize)
 	end
 
 	self.colors = self.basecolors
-	
+
 	self.raccoonfly = false
 	self.blueshelled = false
 	self.frog = false
@@ -4408,7 +4436,7 @@ function mario:setsize(size, oldsize)
 			self.uwfrictionair = 10
 		end
 	end
-	
+
 	if (not oldsize or oldsize ~= self.size) and not bigmario then
 		self.x = self.x + self.width/2 - width/2
 		if self.gravitydir == "down" then
@@ -4417,11 +4445,11 @@ function mario:setsize(size, oldsize)
 		self.width = width
 		self.height = height
 	end
-	
+
 	if ducking and (size > 1 or self.characterdata.smallducking) and size ~= 5 and size ~= 8 and size ~= 16 then
 		self:duck(true, size)
 	end
-	
+
 	if self.shoe then
 		self:shoed(self.shoe)
 	end
@@ -4443,11 +4471,11 @@ function mario:floorcollide(a, b)
 	local anim = self.animationstate
 	local jump = self.jumping
 	local fall = self.falling
-	
+
 	if self:globalcollide(a, b) then
 		return false
 	end
-	
+
 	if a == "spring" then
 		if b.green then
 			self:hitspringgreen(b)
@@ -4535,21 +4563,21 @@ function mario:floorcollide(a, b)
 		self.destroyedblock = nil
 
 		self.combo = 1
-		
+
 		--spikes
 		if tilequads[map[x][y][1]]:getproperty("spikesup", x, y) then
 			if self.invincible or self.starred or self.yoshi or (self.shoe and self.shoe ~= "bigcloud") then
 				--uh
-			else			
+			else
 				self:die("Enemy (floorcollide)")
 			end
 		end
-		
+
 		--lava
 		if tilequads[map[x][y][1]].lava then
 			self:die("lava")
 		end
-		
+
 		--run gel jump
 		if map[x][y]["gels"]["top"] == 1  and self.gravitydir == "down" and math.abs(self.speedx) >= gelmaxwalkspeed then
 			self.jumping = true
@@ -4573,7 +4601,7 @@ function mario:floorcollide(a, b)
 			end
 			self:stopgroundpound()
 		end
-		
+
 		--noteblock
 		if tilequads[map[x][y][1]].noteblock then
 			if (not self.noteblock) and (not portalintile(x, y)) then
@@ -4623,11 +4651,11 @@ function mario:floorcollide(a, b)
 				--return true
 			end
 		end
-		
+
 		if self.gravitydir ~= "down" then
 			self.gravitydir = "down"
 		end
-		
+
 		if map[x][y]["gels"] then
 			local t1, t2
 			local cox1 = math.floor(self.x)+1
@@ -4642,7 +4670,7 @@ function mario:floorcollide(a, b)
 			end
 		end
 	end
-	
+
 	--star logic
 	if self.starred or bigmario or self.statue then
 		if self:starcollide(a, b) then
@@ -4653,7 +4681,7 @@ function mario:floorcollide(a, b)
 			end
 		end
 	end
-	
+
 	if self.gravitydir == "down" then
 		self.falling = false
 		self.jumping = false
@@ -4664,25 +4692,25 @@ function mario:floorcollide(a, b)
 			self.propellerjumped = false
 			self.propellertime = 0
 		end
-		
+
 		if self.float then
 			self.floattimer = 0
 			self.float = false
 			self.ignoregravity = false
 		end
-		
+
 		if self.capefly then
 			self.raccoonfly = false
 			self.capefly = false
 			self.planemode = false
 			self.planetimer = 0
 		end
-		
+
 		if ((self.shoe and self.shoe ~= "yoshi") or self.statue) and self.animation == "flag" then
 			self.speedy = -goombashoehop
 		end
 	end
-	
+
 	--Make mario snap to runspeed if at walkspeed.
 	--[[if leftkey(self.playernumber) then
 		if runkey(self.playernumber) then
@@ -4699,7 +4727,7 @@ function mario:floorcollide(a, b)
 			end
 		end
 	end--]]
-	
+
 	if a == "mushroom" or a == "oneup" or a == "star" or a == "flower" or a == "poisonmush" or a == "threeup" or a == "smbsitem" or a == "hammersuit" or a == "frogsuit" or a == "leaf" or (a == "boomerang" and b.fireballthrower) then
 		self.falling = true
 		return false
@@ -4723,7 +4751,7 @@ function mario:floorcollide(a, b)
 				else
 					return false
 				end
-			elseif self.shoe and (not b.resistsshoe) and ((not b.resistsstar) or (b.resistsstarnotshoe)) then		
+			elseif self.shoe and (not b.resistsshoe) and ((not b.resistsstar) or (b.resistsstarnotshoe)) then
 				if b:shotted("right", false, false, false) ~= false then
 					addpoints(b.firepoints or 200, self.x, self.y)
 				end
@@ -4812,7 +4840,7 @@ function mario:floorcollide(a, b)
 				self:die("Enemy (floorcollide)")
 			end
 			return false
-		else			
+		else
 			self:die("Enemy (floorcollide)")
 			return false
 		end
@@ -4906,7 +4934,7 @@ function mario:floorcollide(a, b)
 		end
 		self:setquad()
 	end
-	
+
 	self.combo = 1
 end
 
@@ -4929,7 +4957,7 @@ function mario:bluegel(dir)
 			self.animationstate = "jumping"
 			self:setquad()
 			self.speedy = self.speedy + (self.gravity or yacceleration)*gdt
-			
+
 			return true
 		end
 	elseif dir == "left" then
@@ -4937,7 +4965,7 @@ function mario:bluegel(dir)
 			if self.speedx > horbounceminspeedx then
 				self.speedx = math.min(-horbouncemaxspeedx, -self.speedx*horbouncemul)
 				self.speedy = math.min(self.speedy, -horbouncespeedy)
-				
+
 				return true
 			end
 		end
@@ -4946,7 +4974,7 @@ function mario:bluegel(dir)
 			if self.speedx < -horbounceminspeedx then
 				self.speedx = math.min(horbouncemaxspeedx, -self.speedx*horbouncemul)
 				self.speedy = math.min(self.speedy, -horbouncespeedy)
-				
+
 				return false
 			end
 		end
@@ -4979,11 +5007,11 @@ function mario:stompenemy(a, b)
 				playsound(oneupsound)
 			end
 			playsound(stompsound)
-			
+
 			bounce = true
 		elseif a == "enemy" then --custom enemies
 			if b.shellanimal then
-				if b.small then	
+				if b.small then
 					playsound(shotsound)
 					if b.speedx == 0 then
 						addpoints(500, b.x, b.y)
@@ -4994,17 +5022,17 @@ function mario:stompenemy(a, b)
 						playsound(stompsound)
 					end
 				end
-				
+
 				b:stomp(self.x, self)
-				
+
 				if b.speedx == 0 or (b.flying and b.small == false) then
 					addpoints(mariocombo[self.combo], self.x, self.y)
 					if self.combo < #mariocombo then
 						self.combo = self.combo + 1
 					end
-				
+
 					local grav = self.gravity or yacceleration
-					
+
 					local bouncespeed = math.sqrt(2*grav*bounceheight)
 					if mariomakerphysics and (not portalphysics) then
 						bouncespeed = math.sqrt(2*grav*bounceheighthigh)
@@ -5014,9 +5042,9 @@ function mario:stompenemy(a, b)
 							self:stopjump()
 						end
 					end
-					
+
 					self.speedy = -bouncespeed
-					
+
 					self.falling = true
 					self.animationstate = "jumping"
 					self:setquad()
@@ -5062,7 +5090,7 @@ function mario:stompenemy(a, b)
 				bounce = true
 			end
 		elseif a == "koopa" then
-			if b.small then	
+			if b.small then
 				playsound(shotsound)
 				if b.speedx == 0 then
 					addpoints(500, b.x, b.y)
@@ -5071,20 +5099,20 @@ function mario:stompenemy(a, b)
 			else
 				playsound(stompsound)
 			end
-			
+
 			b:stomp(self.x, self)
-			
+
 			if b.speedx == 0 or ((b.t == "redflying" or b.t == "flying" or b.t == "flying2") and b.small == false) then
 				addpoints(mariocombo[self.combo], self.x, self.y)
 				if self.combo < #mariocombo then
 					self.combo = self.combo + 1
 				end
-			
+
 				local grav = self.gravity or yacceleration
 				if self.gravitydir == "up" then
 					grav = -self.gravity or -yacceleration
 				end
-				
+
 				local bouncespeed = math.sqrt(2*grav*bounceheight)
 				if mariomakerphysics and (not portalphysics) then
 					bouncespeed = math.sqrt(2*grav*bounceheighthigh)
@@ -5094,9 +5122,9 @@ function mario:stompenemy(a, b)
 						self:stopjump()
 					end
 				end
-				
+
 				self.speedy = -bouncespeed
-				
+
 				self.falling = true
 				self.animationstate = "jumping"
 				self:setquad()
@@ -5135,13 +5163,13 @@ function mario:stompenemy(a, b)
 			if not b.nostompsound then
 				playsound(stompsound)
 			end
-			
+
 			bounce = true
 		end
 	else
 		bounce = true
 	end
-	
+
 	if bounce and ((not self.groundpounding) or self.size == -1) then
 		if self.groundpounding then
 			self:stopgroundpound(true)
@@ -5168,7 +5196,7 @@ function mario:stompenemy(a, b)
 		if self.gravitydir == "up" then
 			bouncespeed = self.gravity
 		end
-		
+
 		self.animationstate = "jumping"
 		self.falling = true
 		self:setquad()
@@ -5181,12 +5209,12 @@ function mario:stompbounce(a, b) --bounce off of enemy (koopaling in shell for e
 	if self.gravitydir == "up" then
 		grav = -self.gravity or -yacceleration
 	end
-	
+
 	local multiplier = 2
 	if a == "yoshi" then
 		multiplier = 5
 	end
-	
+
 	local bouncespeed = math.sqrt(multiplier*grav*bounceheight)
 	if (not stompbouncex) and a ~= "yoshi" and mariomakerphysics and (not portalphysics) then
 		bouncespeed = math.sqrt(2*grav*(b.stompbouncejump or bounceheighthigh))
@@ -5196,7 +5224,7 @@ function mario:stompbounce(a, b) --bounce off of enemy (koopaling in shell for e
 			self:stopjump()
 		end
 	end
-	
+
 	self.animationstate = "jumping"
 	self.falling = true
 	self:setquad()
@@ -5204,7 +5232,7 @@ function mario:stompbounce(a, b) --bounce off of enemy (koopaling in shell for e
 	if b.stompbouncesound then
 		playsound(stompsound)
 	end
-	
+
 	if b.stompbouncex then
 		self.speedx = ((self.x+self.width/2)-(b.x+b.width/2))*bounceheight*b.stompbouncex --bounce horizontally aswell, SMB3 style
 	end
@@ -5214,7 +5242,7 @@ function mario:rightcollide(a, b, passive)
 	if self:globalcollide(a, b) then
 		return false
 	end
-	
+
 	--star logic
 	if self.starred or bigmario or self.statue then
 		if self:starcollide(a, b) then
@@ -5225,7 +5253,7 @@ function mario:rightcollide(a, b, passive)
 			end
 		end
 	end
-	
+
 	if self.gravitydir == "right" then
 		if self.speedy == 0 then
 			self.animationstate = "idle"
@@ -5245,7 +5273,7 @@ function mario:rightcollide(a, b, passive)
 				return false
 			end
 		end
-		if a == "tile" or a == "portalwall" or a == "spring" or a == "donut" or a == "springgreen" or a == "bigmole" or a == "muncher" or (a == "flipblock" and not b.flippable) or a == "frozencoin" or a == "buttonblock" or (a == "enemy" and (b.resistsenemykill or b.resistseverything)) then	
+		if a == "tile" or a == "portalwall" or a == "spring" or a == "donut" or a == "springgreen" or a == "bigmole" or a == "muncher" or (a == "flipblock" and not b.flippable) or a == "frozencoin" or a == "buttonblock" or (a == "enemy" and (b.resistsenemykill or b.resistseverything)) then
 			self.speedx = -math.abs(self.speedx)
 			local x, y = b.cox, b.coy
 			if a == "tile" then
@@ -5281,13 +5309,13 @@ function mario:rightcollide(a, b, passive)
 		self.speedx = -math.abs(self.speedx)
 		playsound(blockhitsound)
 	end
-	
+
 	if a == "mushroom" or a == "oneup" or a == "star" or a == "flower" or a == "poisonmush" or a == "threeup" or a == "smbsitem" or (a == "platform" and (b.dir == "right" or b.dir == "justright")) or a == "donut" or a == "hammersuit" or a == "frogsuit" or a == "leaf" or (a == "boomerang" and b.fireballthrower) then
 		return false
 	elseif a == "enemy" then
 		if b.ignoreleftcollide or b.dontstopmario then
 			return false
-		elseif (b.kills or b.killsonsides or b.killsonleft) then 
+		elseif (b.kills or b.killsonsides or b.killsonleft) then
 			if self.invincible then
 				if b.shellanimal and b.small and b.speedx == 0 then
 					b:stomp(self.x, self)
@@ -5305,7 +5333,7 @@ function mario:rightcollide(a, b, passive)
 					addpoints(firepoints[b.t] or 100, self.x, self.y)
 					return false
 				end
-				
+
 				if b.shellanimal and b.small and b.speedx == 0 then
 					b:stomp(self.x, self)
 					playsound("shot")
@@ -5321,13 +5349,13 @@ function mario:rightcollide(a, b, passive)
 					end
 					return false
 				end
-					
+
 				if b.instantkill then
 					self:die("lava")
 				else
 					self:die("Enemy (rightcollide)")
 				end
-				
+
 				if b.solidkill then
 					return true
 				else
@@ -5381,7 +5409,7 @@ function mario:rightcollide(a, b, passive)
 				addpoints(500, b.x, b.y)
 				return false
 			end
-			
+
 			if not (b.passivepass and b.passivepass == self.playernumber) then
 				self:die("Enemy (rightcollide)")
 			end
@@ -5422,10 +5450,10 @@ function mario:rightcollide(a, b, passive)
 		end
 	elseif a == "tile" then
 		local x, y = b.cox, b.coy
-		
+
 		if map[x][y]["gels"]["left"] == 4 then
 			if ((self.gravitydir == "up" or self.gravitydir == "down") and self.speedx < 0) or self.shoe then
-			
+
 			else
 				if self.gravitydir == "up" then
 					self.reversecontrols = not self.reversecontrols
@@ -5438,29 +5466,29 @@ function mario:rightcollide(a, b, passive)
 		elseif self.gravitydir == "right" then
 			self.gravitydir = "down"
 		end
-		
+
 		if self.gravitydir == "right" then
 			self.falling = false
 			self.jumping = false
 		end
-			
+
 		if map[x][y]["gels"] then
 			--right collide bounce gel
 			if downkey(self.playernumber) == false and map[x][y]["gels"]["left"] == 1 and (self.falling or self.jumping) then
 				if self.speedx > horbounceminspeedx then
 					self.speedx = math.max(-horbouncemaxspeedx, -math.abs(self.speedx)*horbouncemul)
 					self.speedy = math.min(self.speedy, -horbouncespeedy)
-					
+
 					return false
 				end
 			end
 		end
-		
+
 		--check for invisible block
 		if tilequads[map[x][y][1]].invisible then
 			return false
 		end
-		
+
 		--check for noteblocks
 		if tilequads[map[x][y][1]]:getproperty("noteblock", x, y) then
 			if self.noteblock then
@@ -5486,17 +5514,17 @@ function mario:rightcollide(a, b, passive)
 		if tilequads[map[x][y][1]]:getproperty("spikesleft", x, y) then
 			if self.invincible or self.starred or editormode then
 				--uh
-			else	
+			else
 				self:die("Enemy (rightcollide)")
 				--return false
 			end
 		end
-		
+
 		--lava
 		if tilequads[map[x][y][1]].lava then
 			self:die("lava")
 		end
-		
+
 		--Check if it's a pipe with pipe pipe.
 		if self.falling == false and self.jumping == false and (rightkey(self.playernumber) or intermission) then --but only on ground and rightkey
 			for i, p in pairs(pipes) do
@@ -5508,7 +5536,7 @@ function mario:rightcollide(a, b, passive)
 				end
 			end
 		end
-		
+
 		--Check if mario should run across a gap.
 		if inmap(x, y-1) and tilequads[map[x][y-1][1]].collision == false and self.speedy > 0 and self.y+self.height+1 < y+spacerunroom then
 			self.y = b.y - self.height
@@ -5519,7 +5547,7 @@ function mario:rightcollide(a, b, passive)
 			self:setquad()
 			return false
 		end
-		
+
 		if autoscrolling and not editormode then
 			if autoscrollingx then
 				if autoscrollingx > 0 then
@@ -5529,7 +5557,7 @@ function mario:rightcollide(a, b, passive)
 				end
 			end
 		end
-		
+
 		if bigmario then
 			destroyblock(x, y)
 			return false
@@ -5554,14 +5582,14 @@ function mario:rightcollide(a, b, passive)
 			end
 		end
 	elseif a == "turret" then
-		if self.starred then 
-			b:explode() 
+		if self.starred then
+			b:explode()
 		end
-		
+
 		if self.speedx > maxwalkspeed/2 then
 			self.speedx = self.speedx - self.speedx * 6 * gdt
 		end
-		
+
 		--check if turret can even move
 		local out = checkrect(b.x+self.speedx*gdt, b.y, b.width, b.height, {"exclude", b}, true)
 		if #out == 0 then
@@ -5587,7 +5615,7 @@ function mario:rightcollide(a, b, passive)
 	if self.gravitydir == "right" and a ~= "tile" and a ~= "portaltile" and (not b.doesntchangeplayergravity) then
 		self.gravitydir = "down"
 	end
-	
+
 	if (self.gravitydir == "down" or self.gravitydir == "up") and (not self.fence) then
 		if self.falling == false and self.jumping == false then
 			self.animationstate = "idle"
@@ -5600,7 +5628,7 @@ function mario:leftcollide(a, b)
 	if self:globalcollide(a, b) then
 		return false
 	end
-	
+
 	--star logic
 	if self.starred or bigmario or self.statue then
 		if self:starcollide(a, b) then
@@ -5611,7 +5639,7 @@ function mario:leftcollide(a, b)
 			end
 		end
 	end
-	
+
 	if self.gravitydir == "left" then
 		if self.speedy == 0 then
 			self.animationstate = "idle"
@@ -5631,7 +5659,7 @@ function mario:leftcollide(a, b)
 				return false
 			end
 		end
-		if a == "tile" or a == "portalwall" or a == "spring" or a == "donut" or a == "springgreen" or a == "bigmole" or a == "muncher" or (a == "flipblock" and not b.flippable) or a == "frozencoin" or a == "buttonblock" or (a == "enemy" and (b.resistsenemykill or b.resistseverything)) then	
+		if a == "tile" or a == "portalwall" or a == "spring" or a == "donut" or a == "springgreen" or a == "bigmole" or a == "muncher" or (a == "flipblock" and not b.flippable) or a == "frozencoin" or a == "buttonblock" or (a == "enemy" and (b.resistsenemykill or b.resistseverything)) then
 			self.speedx = math.abs(self.speedx)
 			local x, y = b.cox, b.coy
 			if a == "tile" then
@@ -5641,7 +5669,7 @@ function mario:leftcollide(a, b)
 			end
 			return true
 		end
-		
+
 		if a ~= "spring" and a ~= "donut" and a ~= "springgreen" and a ~= "bigmole" and a ~= "muncher" and a ~= "koopaling" and a ~= "bowser" and b.shotted then
 			if b.shotted and (not (b.resistsenemykill or b.resistseverything)) then
 				if self.blueshelled then
@@ -5668,13 +5696,13 @@ function mario:leftcollide(a, b)
 		self.speedx = -math.abs(self.speedx)
 		playsound(blockhitsound)
 	end
-	
+
 	if a == "mushroom" or a == "oneup" or a == "star" or a == "flower" or a == "poisonmush" or a == "threeup" or a == "smbsitem" or (a == "platform" and (b.dir == "right" or b.dir == "justright")) or a == "donut" or a == "hammersuit" or a == "frogsuit" or a == "leaf" or (a == "boomerang" and b.fireballthrower) then --NOTHING
 		return false
 	elseif a == "enemy" then
 		if b.ignorerightcollide or b.dontstopmario then
 			return false
-		elseif (b.kills or b.killsonsides or b.killsonright) then 
+		elseif (b.kills or b.killsonsides or b.killsonright) then
 			if self.invincible then
 				if b.shellanimal and b.small and b.speedx == 0 then
 					b:stomp(self.x, self)
@@ -5692,7 +5720,7 @@ function mario:leftcollide(a, b)
 					addpoints(firepoints[b.t] or 100, self.x, self.y)
 					return false
 				end
-				
+
 				if b.shellanimal and b.small and b.speedx == 0 then
 					b:stomp(self.x, self)
 					playsound("shot")
@@ -5708,7 +5736,7 @@ function mario:leftcollide(a, b)
 					end
 					return false
 				end
-				
+
 				if b.instantkill then
 					self:die("lava")
 				else
@@ -5767,7 +5795,7 @@ function mario:leftcollide(a, b)
 				addpoints(500, b.x, b.y)
 				return false
 			end
-			
+
 			if not (b.passivepass and b.passivepass == self.playernumber) then
 				self:die("Enemy (leftcollide)")
 			end
@@ -5800,7 +5828,7 @@ function mario:leftcollide(a, b)
 		end
 	elseif a == "tile" then
 		local x, y = b.cox, b.coy
-		
+
 		if map[x][y]["gels"]["right"] == 4 then
 			if ((self.gravitydir == "up" or self.gravitydir == "down") and self.speedx > 0) or self.shoe then
 
@@ -5816,19 +5844,19 @@ function mario:leftcollide(a, b)
 		elseif self.gravitydir == "left" then
 			self.gravitydir = "down"
 		end
-		
+
 		if map[x][y]["gels"] then
 			--left collide bounce gel
 			if downkey(self.playernumber) == false and map[x][y]["gels"]["right"] == 1 and (self.falling or self.jumping) then
 				if self.speedx < -horbounceminspeedx then
 					self.speedx = math.min(horbouncemaxspeedx, math.abs(self.speedx)*horbouncemul)
 					self.speedy = math.min(self.speedy, -horbouncespeedy)
-					
+
 					return false
 				end
 			end
 		end
-		
+
 		--check for invisible block
 		if tilequads[map[x][y][1]].invisible then
 			return false
@@ -5854,22 +5882,22 @@ function mario:leftcollide(a, b)
 				end
 			end
 		end
-		
+
 		--spikes
 		if tilequads[map[x][y][1]]:getproperty("spikesright", x, y) then
 			if self.invincible or self.starred or editormode then
 				--uh
-			else			
+			else
 				self:die("Enemy (leftcollide)")
 				--return false
 			end
 		end
-		
+
 		--lava
 		if tilequads[map[x][y][1]].lava then
 			self:die("lava")
 		end
-		
+
 		--Check if it's a pipe with pipe pipe.
 		if self.falling == false and self.jumping == false and (leftkey(self.playernumber) or intermission) then --but only on ground and leftkey
 			for i, p in pairs(pipes) do
@@ -5881,7 +5909,7 @@ function mario:leftcollide(a, b)
 				end
 			end
 		end
-		
+
 		if inmap(x, y-1) and tilequads[map[x][y-1][1]].collision == false and self.speedy > 0 and self.y+1+self.height < y+spacerunroom then
 			self.y = b.y - self.height
 			self.speedy = 0
@@ -5891,7 +5919,7 @@ function mario:leftcollide(a, b)
 			self:setquad()
 			return false
 		end
-		
+
 		if autoscrolling and not editormode then
 			if autoscrollingx then
 				if autoscrollingx < 0 then
@@ -5901,7 +5929,7 @@ function mario:leftcollide(a, b)
 				end
 			end
 		end
-	
+
 		if bigmario then
 			destroyblock(x, y)
 			return false
@@ -5926,14 +5954,14 @@ function mario:leftcollide(a, b)
 			end
 		end
 	elseif a == "turret" then
-		if self.starred then 
-			b:explode() 
+		if self.starred then
+			b:explode()
 		end
-		
+
 		if self.speedx < -maxwalkspeed/2 then
 			self.speedx = self.speedx + math.abs(self.speedx) * 6 * gdt
 		end
-		
+
 		--check if turret can even move
 		local out = checkrect(b.x+self.speedx*gdt, b.y, b.width, b.height, {"exclude", b}, true)
 		if #out == 0 then
@@ -5959,7 +5987,7 @@ function mario:leftcollide(a, b)
 	if self.gravitydir == "left" and a ~= "tile" and a ~= "portaltile" and (not b.doesntchangeplayergravity) then
 		self.gravitydir = "down"
 	end
-	
+
 	if (self.gravitydir == "down" or self.gravitydir == "up") and (not self.fence) then
 		if self.falling == false and self.jumping == false then
 			self.animationstate = "idle"
@@ -5972,7 +6000,7 @@ function mario:ceilcollide(a, b)
 	if self:globalcollide(a, b) then
 		return false
 	end
-	
+
 	--star logic
 	if self.starred or bigmario or self.statue then
 		if self:starcollide(a, b) then
@@ -5983,7 +6011,7 @@ function mario:ceilcollide(a, b)
 			end
 		end
 	end
-	
+
 	if self.gravitydir == "up" and self.speedy <= 0 then
 		if self.speedx == 0 then
 			self.animationstate = "idle"
@@ -6002,7 +6030,7 @@ function mario:ceilcollide(a, b)
 			end
 		end
 	end
-	
+
 	if a == "mushroom" or a == "oneup" or a == "star" or a == "flower" or a == "poisonmush" or a == "threeup" or a == "smbsitem" or a == "hammersuit" or a == "frogsuit" or a == "leaf" or (a == "boomerang" and b.fireballthrower) then --STUFF THAT SHOULDN'T DO SHIT
 		return false
 	elseif a == "enemy" then
@@ -6013,7 +6041,7 @@ function mario:ceilcollide(a, b)
 				b.kill = true
 				return false
 			end
-			
+
 			if b.shellanimal and b.small and b.speedx == 0 then
 				self:stompenemy(a, b, c, d, true)
 				return false
@@ -6168,7 +6196,7 @@ function mario:ceilcollide(a, b)
 							self.speedx = 0
 						end
 						return false
-					end					
+					end
 				end
 			elseif self.x > x-6/16 then
 				--check if block right of it is a better fit
@@ -6182,7 +6210,7 @@ function mario:ceilcollide(a, b)
 							self.speedx = 0
 						end
 						return false
-					end	
+					end
 				end
 			end
 		end
@@ -6195,7 +6223,7 @@ function mario:ceilcollide(a, b)
 	elseif a == "tile" then
 		local x, y = b.cox, b.coy
 		local r = map[x][y]
-		
+
 		if map[x][y]["gels"]["bottom"] == 4 and (not self.shoe) then
 			if self.gravitydir == "left" then
 				self.reversecontrols = true
@@ -6209,21 +6237,21 @@ function mario:ceilcollide(a, b)
 		elseif self.gravitydir == "up" then
 			self.gravitydir = "down"
 		end
-				
+
 		--spikes
 		if tilequads[map[x][y][1]]:getproperty("spikesdown", x, y) then
 			if self.invincible or self.starred then
 				--uh
-			else			
+			else
 				self:die("Enemy (Ceilcollided)")
 			end
 		end
-		
+
 		--lava
 		if tilequads[map[x][y][1]].lava then
 			self:die("lava")
 		end
-		
+
 		--Check if it's a pipe with pipe pipe.
 		if upkey(self.playernumber) then --but only in midair and upkey
 			for i, p in pairs(pipes) do
@@ -6239,7 +6267,7 @@ function mario:ceilcollide(a, b)
 		if self.fence then
 			return true
 		end
-		
+
 		--check if it's an invisible block
 		if tilequads[map[x][y][1]].invisible then
 			if self.y-self.speedy <= y-1 then
@@ -6257,7 +6285,7 @@ function mario:ceilcollide(a, b)
 					return false
 				end
 			end
-			
+
 			--Check if it should bounce the block next to it, or push mario instead (Hello, devin hitch!)
 			if self.gravitydir ~= "up" and self.size ~= 8 and self.size ~= 16 and not b.UPSIDEDOWNSLOPE then
 				if self.x < x-22/16 then
@@ -6272,7 +6300,7 @@ function mario:ceilcollide(a, b)
 								self.speedx = 0
 							end
 							return false
-						end					
+						end
 					end
 				elseif self.x > x-6/16 then
 					--check if block right of it is a better fit
@@ -6286,7 +6314,7 @@ function mario:ceilcollide(a, b)
 								self.speedx = 0
 							end
 							return false
-						end	
+						end
 					end
 				end
 			end
@@ -6304,7 +6332,7 @@ function mario:ceilcollide(a, b)
 			return true
 		end
 	end
-	
+
 	if self.gravitydir ~= "up" then
 		self.jumping = false
 		self.falling = true
@@ -6324,7 +6352,7 @@ function mario:globalcollide(a, b)
 		self.speedx = 0
 		if self.gravitydir == "left" or self.gravitydir == "right" then
 			self.gravitydir = "down"
-		end	
+		end
 		return true
 	elseif a == "grinder" or a == "checkpointflag" then
 		return true
@@ -6334,7 +6362,7 @@ function mario:globalcollide(a, b)
 		if self.vine == false and (not self.yoshi) and self.size ~= 8 and self.size ~= 16 then
 			self:grabvine(b)
 		end
-		
+
 		return true
 	elseif a == "cappy" then
 		if b.thrown and b.holdtimer > 0 and self.speedy > 0 then
@@ -6407,7 +6435,7 @@ function mario:passivecollide(a, b)
 			end
 		end
 	end
-	
+
 	if a == "platform" or a == "seesawplatform" or a == "portalwall" or a == "donut" or a == "icicle" or a == "ice" then
 		return false
 	elseif a == "tilemoving" and b.speedy < 0 then
@@ -6419,10 +6447,10 @@ function mario:passivecollide(a, b)
 				if self.speedx < -maxwalkspeed/2 then
 					self.speedx = self.speedx - self.speedx * 6 * gdt
 				end
-				
+
 			--check if box can even move
 				local out = checkrect(b.x+self.speedx*gdt, b.y, b.width, b.height, {"exclude", b})
-				if #out == 0 then	
+				if #out == 0 then
 					b.speedx = self.speedx
 					return false
 				end
@@ -6430,10 +6458,10 @@ function mario:passivecollide(a, b)
 				if self.speedx > maxwalkspeed/2 then
 					self.speedx = self.speedx - self.speedx * 6 * gdt
 				end
-				
+
 				--check if box can even move
 				local out = checkrect(b.x+self.speedx*gdt, b.y, b.width, b.height, {"exclude", b})
-				if #out == 0 then	
+				if #out == 0 then
 					b.speedx = self.speedx
 					return false
 				end
@@ -6465,12 +6493,12 @@ function mario:passivecollide(a, b)
 		if a == "tile" then
 			local x, y = b.cox, b.coy
 			local isinmap = inmap(x, y)
-			
+
 			--check for invisible block
 			if isinmap and tilequads[map[x][y][1]].invisible then
 				return false
 			end
-			
+
 			--check for noteblock
 			if ((self.noteblock and y == self.noteblock[2]) or (self.noteblock2 and self.speedy < 0)) and isinmap then--if self.noteblock and isinmap and tilequads[map[x][y][1]].noteblock and x == self.noteblock[1] and y == self.noteblock[2] then
 				return false
@@ -6489,7 +6517,7 @@ function mario:passivecollide(a, b)
 					end
 				end
 			end
-			
+
 			if (self.portalgun and self.pointingangle < 0) or (self.portalgun == false and self.animationdirection == "right") then
 				self.x = self.x - self.characterdata.passivespeed*gdt
 			else
@@ -6507,7 +6535,7 @@ function mario:passivecollide(a, b)
 			--nothing, lol.
 		end
 	end
-	
+
 	if a == "buttonblock" or a == "flipblock" or a == "blocktogglebutton" or a == "door" then
 		if autoscrolling and not editormode then
 			if autoscrollingx then
@@ -6523,7 +6551,7 @@ function mario:passivecollide(a, b)
 			end
 		end
 	end
-	
+
 	self:rightcollide(a, b, "passive")
 end
 
@@ -6718,7 +6746,7 @@ function mario:grabfence()
 	self.speedx = 0
 	self.speedy = 0
 	self.ignoregravity = true
-	
+
 	self.raccoonfly = false
 	self.capefly = false
 	self.planemode = false
@@ -6760,10 +6788,10 @@ function portalintile(x, y)
 		local v = objects["player"][i].portal
 		local x1 = v.x1
 		local y1 = v.y1
-		
+
 		local x3 = x1
 		local y3 = y1
-		
+
 		if v.facing1 == "up" then
 			x3 = x3+1
 		elseif v.facing1 == "right" then
@@ -6773,13 +6801,13 @@ function portalintile(x, y)
 		elseif v.facing1 == "left" then
 			y3 = y3-1
 		end
-		
+
 		local x2 = v.x2
 		local y2 = v.y2
-		
+
 		local x4 = x2
 		local y4 = y2
-		
+
 		if v.facing2 == "up" then
 			x4 = x4+1
 		elseif v.facing2 == "right" then
@@ -6789,7 +6817,7 @@ function portalintile(x, y)
 		elseif v.facing2 == "left" then
 			y4 = y4-1
 		end
-		
+
 		if (x == x1 and y == y1) or (x == x2 and y == y2) or (x == x3 and y == y3) or (x == x4 and y == y4) then
 			return true
 		end
@@ -6824,11 +6852,11 @@ function hitblock(x, y, t, v)
 			size = 1
 		end
 	end
-	
+
 	if size and not v then --net hit block
 		net_action(1, "hitblock|" .. x .. "|" .. y .. "|" .. size)
 	end
-	
+
 	if portalintile(x, y) then
 		return
 	end
@@ -6840,7 +6868,7 @@ function hitblock(x, y, t, v)
 	if not inmap(x, y) then
 		return
 	end
-	
+
 	local r = map[x][y]
 	if hitsound then
 		playsound(blockhitsound)
@@ -6859,7 +6887,7 @@ function hitblock(x, y, t, v)
 			end
 		end
 	end
-	
+
 	if tilequads[r[1]].breakable or tilequads[r[1]].coinblock or tilequads[r[1]].noteblock then --Block should bounce!
 		local blockbouncet = createblockbounce(x, y)
 		if tilequads[r[1]].noteblock and dir == "down" then
@@ -6875,7 +6903,7 @@ function hitblock(x, y, t, v)
 			--destroy blocks with spikeyhelmet
 			destroyblock(x, y)
 		elseif #r > 1 and entityquads[r[2]] and entityquads[r[2]].t ~= "manycoins" and entityquads[r[2]].t ~= "tiletool" and
-			entityquads[r[2]].t ~= "ice" and (not ((tilequads[r[1]].breakable or tilequads[r[1]].coinblock) and entityquads[r[2]].t == "collectable")) 
+			entityquads[r[2]].t ~= "ice" and (not ((tilequads[r[1]].breakable or tilequads[r[1]].coinblock) and entityquads[r[2]].t == "collectable"))
 			and (not (tilequads[r[1]].breakable and entityquads[r[2]].t == "coin")) then --block contained something!
 			if enemiesdata[r[2]] then
 				blockbouncet.content = {"customenemy", r[2]}
@@ -6920,7 +6948,7 @@ function hitblock(x, y, t, v)
 			blockbouncet.content = r[2]
 			blockbouncet.content2 = size
 			playsound("mushroomappear")
-			
+
 			if tilequads[r[1]]:getproperty("invisible", x, y) then
 				if spriteset == 1 then
 					map[x][y][1] = 113
@@ -6945,7 +6973,7 @@ function hitblock(x, y, t, v)
 		else
 			blockbouncet.content = false
 			blockbouncet.content2 = size
-			
+
 			if t and (size > 1 or t.helmet or (t.characterdata and t.characterdata.breaksblockssmall)) and (not tilequads[r[1]].coinblock)
 				and (#r == 1 or (r[2] and entityquads[r[2]] and entityquads[r[2]].t and entityquads[r[2]].t ~= "manycoins" and entityquads[r[2]].t ~= "collectable") or r[2] == nil) then --destroy block!
 				if tilequads[r[1]].noteblock then
@@ -6957,7 +6985,7 @@ function hitblock(x, y, t, v)
 				end
 			end
 		end
-		
+
 		--empty coinblocks
 		if ((#r == 1 or (entityquads[r[2]] and (entityquads[r[2]].t == "tiletool" or entityquads[r[2]].t == "ice"))) and tilequads[r[1]].coinblock) or
 			(#r > 1 and (entityquads[r[2]] and entityquads[r[2]].t == "collectable") and (tilequads[r[1]].coinblock or tilequads[r[1]].breakable)) or
@@ -7007,12 +7035,12 @@ function hitblock(x, y, t, v)
 				addpoints(200)
 			end
 		end
-		
+
 		if #r > 1 and entityquads[r[2]] and entityquads[r[2]].t == "manycoins" then --block with many coins inside! yay $_$
 			playsound(coinsound)
 			table.insert(coinblockanimations, coinblockanimation:new(x-0.5, y-1))
 			mariocoincount = mariocoincount + 1
-			
+
 			if mariocoincount == 100 and (not nocoinlimit) then
 				if mariolivecount ~= false then
 					for i = 1, players do
@@ -7024,7 +7052,7 @@ function hitblock(x, y, t, v)
 				playsound(oneupsound)
 			end
 			addpoints(200)
-			
+
 			local exists = false
 			for i = 1, #coinblocktimers do
 				if x == coinblocktimers[i][1] and y == coinblocktimers[i][2] then
@@ -7036,7 +7064,7 @@ function hitblock(x, y, t, v)
 				--keep track of how many coins have been collected
 				coinblocktimers[exists][4] = coinblocktimers[exists][4] + 1
 			end
-			
+
 			if not exists then
 				table.insert(coinblocktimers, {x, y, coinblocktime, 0})
 			elseif coinblocktimers[exists][3] <= 0 or coinblocktimers[exists][4] >= 20 then
@@ -7055,7 +7083,7 @@ function hitblock(x, y, t, v)
 				end
 			end
 		end
-		
+
 		if dir == "up" then
 			hitontop(x, y)
 		end
@@ -7081,7 +7109,7 @@ function hitontop(x, y)
 						if w.x+w.width/2 < x-0.5 then
 							dir = "left"
 						end
-					
+
 						if w.flipshell then
 							w:flipshell(dir)
 							addpoints(100, w.x+w.width/2, w.y)
@@ -7106,7 +7134,7 @@ function hitontop(x, y)
 				if w.x+w.width/2 < x-0.5 then
 					dir = "left"
 				end
-			
+
 				if w.shotted then
 					w:shotted(dir, true)
 					addpoints(100, w.x+w.width/2, w.y)
@@ -7165,7 +7193,7 @@ function destroyblock(x, y, v) --v = true, "nopoints"
 	if portalintile(x, y) or editormode then
 		return
 	end
-	
+
 	local debris = tilequads[map[x][y][1]].debris
 	map[x][y][1] = 1
 	objects["tile"][tilemap(x, y)] = nil
@@ -7177,7 +7205,7 @@ function destroyblock(x, y, v) --v = true, "nopoints"
 		addpoints(50)
 	end
 	updateranges()
-	
+
 	if debris and blockdebrisquads[debris] then
 		table.insert(blockdebristable, blockdebris:new(x-.5, y-.5, 3.5, -23, blockdebrisimage, blockdebrisquads[debris][spriteset]))
 		table.insert(blockdebristable, blockdebris:new(x-.5, y-.5, -3.5, -23, blockdebrisimage, blockdebrisquads[debris][spriteset]))
@@ -7189,7 +7217,7 @@ function destroyblock(x, y, v) --v = true, "nopoints"
 		table.insert(blockdebristable, blockdebris:new(x-.5, y-.5, 3.5, -14))
 		table.insert(blockdebristable, blockdebris:new(x-.5, y-.5, -3.5, -14))
 	end
-	
+
 	if (not v) or (v == "nopoints") then
 		generatespritebatch()
 	end
@@ -7219,7 +7247,7 @@ function mario:die(how)
 	if (CLIENT or SERVER) and self.playernumber > 1 and not self.netaction then
 		return
 	end
-	
+
 	if how ~= "pit" and how ~= "time" and how ~= "lava" and how ~= "killscript" and not self.dead then
 		animationsystem_playerhurttrigger(self.playernumber)
 
@@ -7237,7 +7265,7 @@ function mario:die(how)
 			self.quadcenterX = self.characterdata.smallquadcenterX
 			self.offsetY = self.characterdata.smalloffsetX]]
 		end
-		
+
 		if self.shoe then
 			self.invincible = true
 			self.animationtimer = 0
@@ -7258,7 +7286,7 @@ function mario:die(how)
 			self:helmeted(false)
 			return
 		end
-		
+
 		if self.yoshi then
 			self.yoshi = false
 			self:shoed(false)
@@ -7276,12 +7304,14 @@ function mario:die(how)
 			end
 			return false
 		end
-		
+
 		if self.size > 1 then
 			self:shrink()
 			return
-		else
+		end
 
+		if neverdie then
+			return
 		end
 	elseif how ~= "time" and how ~= "lava" and how ~= "killscript" then
 		if bonusstage then
@@ -7303,21 +7333,21 @@ function mario:die(how)
 	if self.ducking then
 		self:duck(false)
 	end
-	
+
 	if editormode then
 		self.y = 0
 		self.speedy = 0
 		return
 	end
 	self.dead = true
-	
+
 	everyonedead = true
 	for i = 1, players do
 		if not objects["player"][i].dead then
 			everyonedead = false
 		end
 	end
-	
+
 	self.animationmisc = nil
 	if everyonedead then
 		self.animationmisc = "everyonedead"
@@ -7326,9 +7356,9 @@ function mario:die(how)
 		updatesizes("reset")
 		updateplayerproperties("reset")
 	end
-	
+
 	playsound(deathsound)
-	
+
 	if how == "time" or how == "lava" or how == "killscript" then
 		noupdate = false
 		self.graphic = self.smallgraphic
@@ -7340,7 +7370,7 @@ function mario:die(how)
 		self.drawable = true
 		self.colors = mariocolors[self.playernumber]
 	end
-	
+
 	if how == "pit" then
 		self.animation = "deathpit"
 		self.size = 1
@@ -7355,9 +7385,9 @@ function mario:die(how)
 		self:setquad()
 		self.speedy = 0
 	end
-	
+
 	self.y = self.y - 1/16
-	
+
 	self.animationx = self.x
 	self.animationy = self.y
 	self.animationtimer = 0
@@ -7371,12 +7401,10 @@ function mario:die(how)
 	self.statue = false
 	self.statuetimer = false
 	self.key = 0
-	
+
 	if not levelfinished and not testlevel and not infinitelives and mariolivecount ~= false then
 		mariolives[self.playernumber] = mariolives[self.playernumber] - 1
 	end
-	
-	return
 end
 
 function mario:laser(dir)
@@ -7397,7 +7425,7 @@ end
 function getAngleFrame(angle, b)
 	local mouseabs = math.abs(angle)
 	local angleframe
-	
+
 	if (b and b.portalgun == false) and (not (playertype and playertype == "minecraft")) then
 		angleframe = 5
 	elseif b and b.gravitydir == "up" and b.portalgun then
@@ -7425,23 +7453,23 @@ function getAngleFrame(angle, b)
 			angleframe = 4
 		end
 	end
-	
+
 	return angleframe
 end
 
 function mario:emancipate(a)
 	self:removeportals()
-	
+
 	local delete = {}
-	
+
 	for i, v in pairs(portalprojectiles) do
 		if v.plnumber and v.plnumber == self.playernumber then
 			table.insert(delete, i)
 		end
 	end
-	
+
 	table.sort(delete, function(a,b) return a>b end)
-	
+
 	for i, v in pairs(delete) do
 		table.remove(portalprojectiles, v) --remove
 	end
@@ -7462,18 +7490,18 @@ function mario:shootportal(i)
 		self.animationstate = "falling"
 		self:setquad()
 	end
-	
+
 	if playertype == "portal" and self.portalgun and (self.portals == "both" or self.portals == i .. " only") then
 		local sourcex, sourcey = self.x+self.portalsourcex, self.y+self.portalsourcey
 		local direction = self.pointingangle
-		
+
 		net_action(self.playernumber, "portal|" .. i .. "|" .. sourcex .. "|" .. sourcey .. "|" .. direction)
 		shootportal(self.playernumber, i, sourcex, sourcey, direction)
 	elseif playertype == "minecraft" then
 		local v = self
 		local sourcex, sourcey = self.x+self.portalsourcex, self.y+self.portalsourcey
 		local cox, coy, side, tend, x, y = traceline(sourcex, sourcey, v.pointingangle)
-		
+
 		if i == 1 then
 			if cox then
 				local dist = math.sqrt((v.x+v.width/2 - x)^2 + (v.y+v.height/2 - y)^2)
@@ -7525,7 +7553,7 @@ function mario:use()
 	if self.cappy and UseButtonCappy then
 		self.cappy:trigger(self.animationdirection, "use")
 	end
-	
+
 	if self.pickup then
 		if self.pickup.destroying then
 			self.pickup = false
@@ -7542,7 +7570,7 @@ function mario:use()
 	end
 	local xcenter = self.x + 6/16 - math.sin(self.pointingangle)*userange
 	local ycenter = self.y + 6/16 - math.cos(self.pointingangle)*userange
-	
+
 	local col = userect(xcenter-usesquaresize/2, ycenter-usesquaresize/2, usesquaresize, usesquaresize)
 	for i, c in pairs(col) do
 		if not (c.active and c.y+c.height < self.y-4/16 and c.speedy == 0 and c.speedx == 0) then
@@ -7565,12 +7593,12 @@ function mario:dropbox() --uploading...
 		self.pickup = nil
 		return
 	end
-	
+
 	local set = false
-	
+
 	local boxx = self.x+math.sin(-self.pointingangle)*0.3
 	local boxy = self.y-math.cos(-self.pointingangle)*0.3
-	
+
 	if self.pointingangle < 0 then
 		if #checkrect(self.x+self.width, self.y+self.height-12/16, 12/16, 12/16, {"exclude", self.pickup}, true, "ignoreplatforms") == 0 then
 			self.pickup.x = self.x+self.width
@@ -7584,7 +7612,7 @@ function mario:dropbox() --uploading...
 			set = true
 		end
 	end
-	
+
 	if set == false then
 		if #checkrect(self.x+self.width, self.y+self.height-12/16, 12/16, 12/16, {"exclude", self.pickup}, true, "ignoreplatforms") == 0 then
 			self.pickup.x = self.x+self.width
@@ -7603,7 +7631,7 @@ function mario:dropbox() --uploading...
 			self.pickup.y = self.y
 		end
 	end
-	
+
 	if self.pickup.emancipatecheck then
 		for h, u in pairs(emancipationgrills) do
 			if u.active then
@@ -7714,7 +7742,7 @@ function mario:duck(ducking, size, dontmove, playercontrols) --goose
 				self.friction = self.characterdata.friction
 				self.blueshelled = false
 			end
-			
+
 			if self.supersized then
 				self:setsize(self.size)
 			end
@@ -7835,11 +7863,11 @@ function mario:pipe(x, y, dir, i)--, warppipe)
 		end
 	end
 
-	
+
 	if self.animationmisc[1] ~= "linked" and intermission then
 		respawnsublevel = self.animationmisc[2] --respawn in sublevel
 	end
-	
+
 	self.customscissor = p.scissor[p:opp(dir)]
 	if self.pickup then
 		self.pickup.customscissor = p.scissor[p:opp(dir)]
@@ -7853,7 +7881,7 @@ function mario:pipe(x, y, dir, i)--, warppipe)
 	elseif dir == "left" then
 		self.animationstate = "running"
 	end
-	
+
 	self:setquad()
 end
 
@@ -7915,7 +7943,7 @@ function mario:pipetravel()
 			end
 			return
 		end
-		
+
 		self.controlsenabled = false
 		self.active = false
 		self.drawable = false
@@ -7924,7 +7952,7 @@ function mario:pipetravel()
 		self.speedx = 0
 		self.speedy = 0
 		self.animationtimer = pipeupdelay
-		
+
 		self.customscissor = p.scissor[dir]
 		if self.pickup then
 			self.pickup.customscissor = p.scissor[dir]
@@ -7934,19 +7962,19 @@ function mario:pipetravel()
 			self.animation = "pipeupexit"
 			self.x = p.x-self.width/2
 			self.y = self.animationy + 20/16
-			
+
 			self.animationstate = "idle"
 		elseif dir == "down" then
 			self.animation = "pipedownexit"
 			self.x = p.x-self.width/2
 			self.y = (self.animationy+8/16) - 20/16
-			
+
 			self.animationstate = "idle"
 		elseif dir == "left" then
 			self.animation = "pipeleftexit"
 			self.x = self.animationx+10/16
 			self.y = self.animationy - self.height
-			
+
 			self.animationstate = "running"
 			self.pointingangle = math.pi/2
 			self.animationdirection = "left"
@@ -7954,7 +7982,7 @@ function mario:pipetravel()
 			self.animation = "piperightexit"
 			self.x = self.animationx + 6/16
 			self.y = self.animationy - self.height
-			
+
 			self.animationstate = "running"
 			self.pointingangle = -math.pi/2
 			self.animationdirection = "right"
@@ -8058,7 +8086,7 @@ function mario:flag()
 	firework = false
 	castleflagy = castleflagstarty
 	objects["screenboundary"]["flag"].active = false
-	
+
 	--get score
 	flagscore = flagscores[1]
 	for i = 1, #flagvalues do
@@ -8068,22 +8096,22 @@ function mario:flag()
 			break
 		end
 	end
-	
+
 	addpoints(flagscore)
-	
+
 	--get firework count
 	fireworkcount = tonumber(string.sub(math.ceil(mariotime), -1, -1))
 	if fireworkcount ~= 1 and fireworkcount ~= 3 and fireworkcount ~= 6 then
 		fireworkcount = 0
 	end
-	
+
 	if portalbackground then
 		fireworkcount = 0
 	end
-	
+
 	stopmusic()
 	love.audio.stop()
-	
+
 	--one up at the top of the flag
 	if mariomakerphysics and self.y < flagvalues[#flagvalues]-13+flagy then
 		if mariolivecount ~= false then
@@ -8098,7 +8126,7 @@ function mario:flag()
 	if self.largeshrink then
 		playsound(shrinksound)
 	end
-	
+
 	--time level completed in
 	realmariotime = mariotime
 
@@ -8109,7 +8137,7 @@ function mario:flag()
 			v.instantdelete = true
 		end
 	end
-	
+
 	playsound(levelendsound)
 end
 
@@ -8121,7 +8149,7 @@ function mario:axe()
 	for i = 1, players do
 		objects["player"][i]:removeportals()
 	end
-	
+
 	for i, v in pairs(objects["platform"]) do
 		objects["platform"][i] = nil
 	end
@@ -8154,7 +8182,7 @@ function mario:axe()
 	self.axeforgivedistance = 2 --how far the axe can be away from the bridge and still destroy it
 	bowserfall = false
 	objects["screenboundary"]["axe"] = nil
-	
+
 	self.axeboss = false
 	if objects["bowser"] and objects["bowser"]["boss"] then
 		self.axeboss = objects["bowser"]["boss"]
@@ -8194,12 +8222,12 @@ function mario:axe()
 		self.animationstate = "running"
 		self.speedx = 4.27
 		self.pointingangle = -math.pi/2
-		
+
 		stopmusic()
 		love.audio.stop()
 		playsound(castleendsound)
 	end
-	
+
 	axex = false
 	axey = false
 end
@@ -8226,7 +8254,7 @@ function mario:star()
 		self.colors = self.characterdata.starcolors[1]
 		playsound(mushroomeatsound)
 	end
-	
+
 	self.startimer = 0
 	self.starred = true
 	stopmusic()
@@ -8602,9 +8630,9 @@ function mario:fire()
 			end
 			return false
 		end
-		
+
 		if self.fireenemy or self.characterdata.fireenemy then
-			
+
 		elseif (self.size == 6 or self.size == 9 or self.size == 10) and self.animation ~= "grow2" and not self.fence and not self.vine then
 			if self.spinanimationtimer >= raccoonspintime and (not (self.speedy ~= 0 and self.raccoonfly)) then
 				local dir = "right"
@@ -8618,7 +8646,7 @@ function mario:fire()
 				playsound(raccoonswingsound)
 				net_action(self.playernumber, "fire")
 			end
-		elseif (self.size == 3 or self.size == 7 or self.size == 13) then
+		elseif (self.size == 3 or self.size == 7 or self.size == 13 or alwaysfiery) then
 			if self.fireballcount < maxfireballs then
 				local dir = "right"
 				if (self.portalgun and self.pointingangle > 0) or (self.portalgun == false and self.animationdirection == "left") then
@@ -8741,9 +8769,9 @@ function mario:portaled(dir)
 	if not sonicrainboom or not self.rainboomallowed then
 		return
 	end
-	
+
 	local didrainboom = false
-	
+
 	if dir == "up" then
 		if self.speedy < -rainboomspeed then
 			didrainboom = true
@@ -8757,13 +8785,13 @@ function mario:portaled(dir)
 			didrainboom = true
 		end
 	end
-	
+
 	if didrainboom then
 		table.insert(rainbooms, rainboom:new(self.x+self.width/2, self.y+self.height/2, dir))
 		earthquake = rainboomearthquake
 		self.rainboomallowed = false
 		playsound(rainboomsound)
-		
+
 		for i, v in pairs(enemies) do
 			if objects[v] then
 				for j, w in pairs(objects[v]) do
@@ -8778,17 +8806,17 @@ function mario:portaled(dir)
 				end
 			end
 		end
-		
+
 		self.hats = {33}
 	end
 end
 
 function mario:shootgel(i)
 	table.insert(objects["gel"], gel:new(self.x+self.width/2+8/16, self.y+self.height/2+6/16, i))
-	
+
 	local xspeed = math.cos(-self.pointingangle-math.pi/2)*gelcannonspeed
 	local yspeed = math.sin(-self.pointingangle-math.pi/2)*gelcannonspeed
-	
+
 	objects["gel"][#objects["gel"]].speedy = yspeed
 	objects["gel"][#objects["gel"]].speedx = xspeed
 end
@@ -8797,14 +8825,14 @@ function mario:respawn()
 	if mariolivecount ~= false and (mariolives[self.playernumber] == 0 or levelfinished) then
 		return
 	end
-	
+
 	local i = 1
 	while i <= players and (objects["player"][i].dead or self.playernumber == i) do
 		i = i + 1
 	end
-	
+
 	local fastestplayer = objects["player"][i]
-	
+
 	if fastestplayer then
 		if mapwidth <= width then
 			for i = 2, players do
@@ -8820,7 +8848,7 @@ function mario:respawn()
 			end
 		end
 	end
-	
+
 	self.speedy = 0
 	self.speedx = 0
 	self.dead = false
@@ -8830,11 +8858,11 @@ function mario:respawn()
 	self.drawable = true
 	self.animationstate = "idle"
 	self:setquad()
-	
+
 	self.animation = "invincible"
 	self.invincible = true
 	self.animationtimer = 0
-	
+
 	if (not fastestplayer) or (fastestplayer.y >= mapheight) then
 		self.x = startx
 		self.y = starty-1-self.height
@@ -8842,10 +8870,10 @@ function mario:respawn()
 		self.y = fastestplayer.y + fastestplayer.height-self.height
 		self.x = fastestplayer.x
 	end
-	
+
 	self.jumping = false
 	self.falling = true
-	
+
 	self.controlsenabled = true
 	self.active = true
 end
@@ -8888,7 +8916,7 @@ function mario:turretshot(tx, ty, sx, sy, knockback) --turret
 	if self.hitpointsdelay > 0 then
 		return false
 	end
-	if self.dead or self.starred then 
+	if self.dead or self.starred then
 		return false
 	end
 	if knockback then
@@ -8896,7 +8924,7 @@ function mario:turretshot(tx, ty, sx, sy, knockback) --turret
 			self.speedx = self.speedx + (sx/math.abs(sx))*9 --push back
 		end
 	end
-	if self.invincible then 
+	if self.invincible then
 		return false
 	end
 	self.hitpointsdelay = turrethitdelay
@@ -8909,7 +8937,7 @@ function mario:turretshot(tx, ty, sx, sy, knockback) --turret
 	local v = math.max(0, self.hitpoints/maxhitpoints)
 	makepoof(self.x+self.width/2+(8*(math.random()-.5))/16, self.y+self.height/2+(8*(math.random()-.5))/16, "turretshot", {v,v,v})
 
-	
+
 	return true
 	--print(self.hitpoints)
 end
@@ -9062,7 +9090,7 @@ function mario:statued(statue) --tanooki statue
 		self.statue = true
 		self.colors = self.characterdata.statuecolor
 		self.invincible = true
-		
+
 		self.raccoonfly = false
 		self.capefly = false
 		self.planemode = false
